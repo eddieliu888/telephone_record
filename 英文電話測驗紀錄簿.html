@@ -1,0 +1,2430 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>英文電話測驗紀錄簿｜歷史檔案版</title>
+  <style>
+    :root{
+      --bg:#edf3f9;
+      --panel:#ffffff;
+      --ink:#172033;
+      --muted:#64748b;
+      --line:#d7e2ee;
+      --primary:#2357a6;
+      --primary-dark:#173f7d;
+      --good:#14804a;
+      --bad:#c53030;
+      --soft:#f7fbff;
+      --tab:#eaf1fb;
+      --shadow:0 10px 24px rgba(20,40,70,.10);
+      --radius:16px;
+    }
+
+    *{box-sizing:border-box}
+
+    html,body{
+      width:100%;
+      height:100%;
+      margin:0;
+      overflow:hidden;
+      font-family:"Segoe UI","Noto Sans TC",Arial,sans-serif;
+      color:var(--ink);
+      background:linear-gradient(135deg,#edf3f9,#fbfdff);
+    }
+
+    button,input,select,textarea{font:inherit}
+
+    .app{
+      width:100vw;
+      height:100vh;
+      padding:10px;
+      display:grid;
+      grid-template-rows:64px 1fr;
+      gap:10px;
+    }
+
+    header{
+      min-width:0;
+      background:var(--panel);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:8px 12px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      min-width:260px;
+    }
+
+    .logo{
+      flex:none;
+      width:44px;
+      height:44px;
+      border-radius:14px;
+      background:linear-gradient(135deg,var(--primary),#65a8fb);
+      display:grid;
+      place-items:center;
+      color:#fff;
+      font-size:24px;
+      font-weight:900;
+      box-shadow:0 8px 18px rgba(35,87,166,.22);
+    }
+
+    h1{
+      margin:0;
+      font-size:20px;
+      line-height:1.15;
+      white-space:nowrap;
+    }
+
+    .subtitle{
+      margin-top:2px;
+      color:var(--muted);
+      font-size:12px;
+      white-space:nowrap;
+    }
+
+    .top-actions{
+      display:flex;
+      gap:7px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+      align-items:center;
+    }
+
+    .btn{
+      border:0;
+      border-radius:11px;
+      padding:8px 11px;
+      font-weight:800;
+      cursor:pointer;
+      background:#e9eff8;
+      color:var(--primary-dark);
+      white-space:nowrap;
+      transition:.15s transform,.15s opacity;
+    }
+
+    .btn:hover{transform:translateY(-1px);opacity:.95}
+    .btn.primary{background:var(--primary);color:#fff}
+    .btn.good{background:var(--good);color:#fff}
+    .btn.bad{background:var(--bad);color:#fff}
+    .btn.ghost{background:#fff;border:1px solid var(--line);color:var(--ink)}
+    .btn.small{padding:6px 9px;font-size:12px;border-radius:9px}
+    .btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
+
+    input[type=file]{display:none}
+
+    main{
+      min-height:0;
+      display:grid;
+      grid-template-columns:1fr 310px;
+      gap:10px;
+    }
+
+    .main-card,.side-card{
+      min-height:0;
+      background:var(--panel);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+
+    .main-card{
+      display:grid;
+      grid-template-rows:52px 1fr 54px;
+    }
+
+    .tabs{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      padding:8px 10px;
+      border-bottom:1px solid var(--line);
+      background:linear-gradient(180deg,#fff,#f7faff);
+      overflow:hidden;
+    }
+
+    .tab{
+      border:1px solid var(--line);
+      background:var(--tab);
+      color:var(--primary-dark);
+      border-radius:999px;
+      padding:8px 14px;
+      font-size:14px;
+      font-weight:900;
+      cursor:pointer;
+      white-space:nowrap;
+    }
+
+    .tab.active{
+      background:var(--primary);
+      color:#fff;
+      border-color:var(--primary);
+      box-shadow:0 6px 14px rgba(35,87,166,.2);
+    }
+
+    .tab-spacer{flex:1}
+
+    .mode-label{
+      color:var(--muted);
+      font-size:12px;
+      font-weight:800;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      white-space:nowrap;
+      max-width:270px;
+    }
+
+    .panel{
+      min-height:0;
+      display:none;
+      padding:14px;
+      overflow:hidden;
+    }
+
+    .panel.active{display:grid}
+
+    label{
+      display:block;
+      color:var(--muted);
+      font-size:12px;
+      font-weight:900;
+      margin-bottom:5px;
+    }
+
+    input,select,textarea{
+      width:100%;
+      border:1px solid var(--line);
+      border-radius:11px;
+      background:#fff;
+      color:var(--ink);
+      padding:9px 10px;
+      outline:none;
+    }
+
+    input:focus,select:focus,textarea:focus{
+      border-color:#7ba7e8;
+      box-shadow:0 0 0 3px rgba(35,87,166,.12);
+    }
+
+    textarea{
+      resize:none;
+      line-height:1.55;
+    }
+
+    .template-panel{
+      grid-template-columns:1fr 360px;
+      gap:12px;
+    }
+
+    .template-editor{
+      min-height:0;
+      display:grid;
+      grid-template-rows:auto 1fr;
+      gap:10px;
+    }
+
+    .template-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr 1fr;
+      gap:10px;
+      align-items:end;
+    }
+
+    .template-content{
+      min-height:0;
+      display:grid;
+      grid-template-rows:auto 1fr;
+    }
+
+    .section-title{
+      font-size:16px;
+      font-weight:900;
+      color:var(--primary-dark);
+      margin-bottom:8px;
+    }
+
+    #templateContent{
+      height:100%;
+      min-height:0;
+      font-size:17px;
+      line-height:1.65;
+      padding:14px;
+      background:linear-gradient(180deg,#fff,#fbfdff);
+    }
+
+    .template-list{
+      min-height:0;
+      border:1px solid var(--line);
+      border-radius:14px;
+      overflow:hidden;
+      display:grid;
+      grid-template-rows:42px 1fr;
+    }
+
+    .list-head{
+      padding:10px 12px;
+      background:#f6f9fd;
+      border-bottom:1px solid var(--line);
+      font-weight:900;
+      color:var(--primary-dark);
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:8px;
+    }
+
+    .list-body{
+      min-height:0;
+      overflow:auto;
+      padding:8px;
+    }
+
+    .template-item{
+      border:1px solid var(--line);
+      border-radius:12px;
+      padding:9px;
+      margin-bottom:8px;
+      background:#fff;
+    }
+
+    .template-item.active{
+      border-color:#7ba7e8;
+      box-shadow:0 0 0 3px rgba(35,87,166,.1);
+      background:#fbfdff;
+    }
+
+    .template-name{
+      font-weight:900;
+      margin-bottom:4px;
+      color:#1f2a44;
+      word-break:break-word;
+    }
+
+    .template-meta{
+      color:var(--muted);
+      font-size:12px;
+      line-height:1.45;
+      margin-bottom:7px;
+    }
+
+    .item-actions,.row-actions{
+      display:flex;
+      gap:6px;
+      flex-wrap:wrap;
+    }
+
+    .record-panel{
+      grid-template-rows:auto 1fr;
+      gap:12px;
+    }
+
+    .record-top{
+      display:grid;
+      grid-template-columns:2fr 1fr 1fr 1fr;
+      gap:10px;
+      align-items:end;
+    }
+
+    .record-work{
+      min-height:0;
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+    }
+
+    .box{
+      min-height:0;
+      border:1px solid var(--line);
+      border-radius:14px;
+      background:#fff;
+      overflow:hidden;
+      display:grid;
+      grid-template-rows:42px 1fr;
+    }
+
+    .box-head{
+      padding:9px 11px;
+      background:#f6f9fd;
+      border-bottom:1px solid var(--line);
+      font-weight:900;
+      color:var(--primary-dark);
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:8px;
+    }
+
+    .box-body{
+      min-height:0;
+      padding:10px;
+      overflow:auto;
+    }
+
+    .test-preview{
+      white-space:pre-wrap;
+      font-size:17px;
+      line-height:1.65;
+      color:#1f2937;
+    }
+
+    .student-form{
+      min-height:0;
+      display:grid;
+      grid-template-rows:auto auto 1fr;
+      gap:10px;
+    }
+
+    .student-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+      align-items:end;
+    }
+
+    .quick-panel{
+      min-height:0;
+      border:1px solid var(--line);
+      border-radius:14px;
+      background:#f8fbff;
+      padding:8px;
+      overflow:auto;
+      max-height:148px;
+    }
+
+    .quick-group{
+      display:flex;
+      gap:6px;
+      flex-wrap:wrap;
+      align-items:center;
+      margin-bottom:7px;
+    }
+
+    .quick-title{
+      font-size:12px;
+      font-weight:900;
+      color:var(--primary-dark);
+      min-width:62px;
+    }
+
+    .notes-grid{
+      min-height:0;
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      grid-template-rows:1fr 1fr;
+      gap:9px;
+    }
+
+    .note-box{
+      min-height:0;
+      display:grid;
+      grid-template-rows:auto 1fr;
+    }
+
+    .note-box textarea{
+      height:100%;
+      min-height:0;
+      font-size:14px;
+    }
+
+    .records-panel{
+      grid-template-rows:auto auto auto 1fr;
+      gap:10px;
+    }
+
+    .records-tools{
+      display:grid;
+      grid-template-columns:1fr 160px 150px 140px auto;
+      gap:8px;
+      align-items:end;
+    }
+
+    .standalone-test-box{
+      border:1px solid var(--line);
+      border-radius:14px;
+      background:#f8fbff;
+      overflow:hidden;
+      display:grid;
+      grid-template-rows:auto minmax(56px, auto);
+    }
+
+    .standalone-test-head{
+      padding:8px 11px;
+      border-bottom:1px solid var(--line);
+      background:#eef5ff;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:8px;
+      color:var(--primary-dark);
+      font-weight:900;
+      font-size:14px;
+    }
+
+    .standalone-test-content{
+      padding:10px 12px;
+      white-space:pre-wrap;
+      font-size:14px;
+      line-height:1.5;
+      color:#263244;
+      max-height:132px;
+      overflow:auto;
+    }
+
+    .table-wrap{
+      min-height:0;
+      overflow:auto;
+      border:1px solid var(--line);
+      border-radius:14px;
+    }
+
+    table{
+      width:100%;
+      min-width:960px;
+      border-collapse:separate;
+      border-spacing:0;
+    }
+
+    th,td{
+      padding:9px 8px;
+      border-bottom:1px solid var(--line);
+      text-align:left;
+      vertical-align:top;
+      font-size:13px;
+    }
+
+    th{
+      position:sticky;
+      top:0;
+      z-index:2;
+      background:#f5f8fc;
+      color:#334155;
+      font-size:12px;
+      border-bottom:1px solid #cfd8e3;
+    }
+
+    tbody tr:hover{background:#f8fbff}
+
+    .muted{color:var(--muted)}
+    .score{font-weight:900}
+
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      border-radius:999px;
+      padding:3px 8px;
+      font-size:12px;
+      font-weight:900;
+    }
+
+    .pill.A{background:#e7f7ef;color:#0c6b41}
+    .pill.B{background:#e6f0ff;color:#174ea6}
+    .pill.C{background:#fff4db;color:#8a5a00}
+    .pill.D{background:#fde8e8;color:#9b1c1c}
+
+    .preview-line{
+      white-space:pre-line;
+      line-height:1.42;
+      max-height:78px;
+      overflow:hidden;
+      display:block;
+    }
+
+    .empty{
+      padding:28px;
+      text-align:center;
+      color:var(--muted);
+    }
+
+    .footer{
+      padding:8px 12px;
+      border-top:1px solid var(--line);
+      background:#fbfdff;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+    }
+
+    .footer-left,.footer-right{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      flex-wrap:wrap;
+    }
+
+    .status{
+      font-size:12px;
+      color:var(--muted);
+      font-weight:800;
+    }
+
+    .side-card{
+      display:grid;
+      grid-template-rows:44px auto 1fr;
+    }
+
+    .side-title{
+      padding:10px 12px;
+      border-bottom:1px solid var(--line);
+      background:linear-gradient(180deg,#fff,#f7faff);
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:8px;
+    }
+
+    .side-title h2{
+      font-size:15px;
+      margin:0;
+    }
+
+    .stats{
+      padding:10px;
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:8px;
+      border-bottom:1px solid var(--line);
+    }
+
+    .stat{
+      border:1px solid var(--line);
+      border-radius:13px;
+      background:#f8fbff;
+      padding:9px;
+    }
+
+    .stat .label{
+      font-size:11px;
+      font-weight:900;
+      color:var(--muted);
+    }
+
+    .stat .num{
+      margin-top:3px;
+      color:var(--primary-dark);
+      font-size:22px;
+      font-weight:950;
+    }
+
+    .summary{
+      min-height:0;
+      overflow:auto;
+      padding:10px;
+    }
+
+    .summary-box{
+      border:1px solid var(--line);
+      background:#fff;
+      border-radius:14px;
+      padding:10px;
+      margin-bottom:10px;
+    }
+
+    .summary-box h3{
+      margin:0 0 8px;
+      font-size:14px;
+      color:var(--primary-dark);
+    }
+
+    .summary-line{
+      font-size:13px;
+      line-height:1.6;
+      color:#334155;
+      word-break:break-word;
+    }
+
+    .small-note{
+      font-size:12px;
+      color:var(--muted);
+      line-height:1.55;
+    }
+
+    .print-only{display:none}
+
+
+    .history-panel{
+      grid-template-rows:auto 1fr;
+      gap:12px;
+    }
+
+    .history-tools{
+      border:1px solid var(--line);
+      border-radius:14px;
+      background:#f8fbff;
+      padding:11px;
+      display:grid;
+      grid-template-columns:1.15fr 1.35fr auto;
+      gap:10px;
+      align-items:end;
+    }
+
+    .archive-action-box{
+      display:flex;
+      gap:8px;
+      align-items:center;
+      justify-content:flex-end;
+      flex-wrap:wrap;
+    }
+
+    .archive-target-info{
+      grid-column:1 / -1;
+      border-top:1px dashed var(--line);
+      padding-top:8px;
+      color:var(--muted);
+      font-size:12px;
+      font-weight:800;
+      line-height:1.55;
+    }
+
+    .history-list{
+      min-height:0;
+      overflow:auto;
+      border:1px solid var(--line);
+      border-radius:14px;
+      background:#fff;
+      padding:10px;
+    }
+
+    .archive-card{
+      border:1px solid var(--line);
+      border-radius:14px;
+      background:#fff;
+      margin-bottom:10px;
+      overflow:hidden;
+    }
+
+    .archive-card-head{
+      background:linear-gradient(180deg,#f6f9fd,#eef5ff);
+      border-bottom:1px solid var(--line);
+      padding:10px 12px;
+      display:grid;
+      grid-template-columns:1fr auto;
+      gap:8px;
+      align-items:center;
+    }
+
+    .archive-title{
+      font-size:15px;
+      font-weight:950;
+      color:var(--primary-dark);
+      word-break:break-word;
+    }
+
+    .archive-meta{
+      color:var(--muted);
+      font-size:12px;
+      line-height:1.55;
+      margin-top:3px;
+    }
+
+    .archive-actions{
+      display:flex;
+      gap:7px;
+      justify-content:flex-end;
+      flex-wrap:wrap;
+    }
+
+    .archive-card-body{
+      padding:10px 12px;
+    }
+
+    .archive-note{
+      color:#334155;
+      font-size:13px;
+      line-height:1.55;
+      margin-bottom:8px;
+      background:#fbfdff;
+      border:1px solid var(--line);
+      border-radius:10px;
+      padding:7px 9px;
+    }
+
+    .history-mini-table{
+      width:100%;
+      min-width:740px;
+      border-collapse:separate;
+      border-spacing:0;
+    }
+
+    .history-mini-table th,.history-mini-table td{
+      font-size:12.5px;
+      padding:7px 7px;
+    }
+
+    .history-empty{
+      padding:30px 12px;
+      text-align:center;
+      color:var(--muted);
+      line-height:1.7;
+    }
+
+    @media (max-width:1180px){
+      .app{padding:8px;grid-template-rows:58px 1fr}
+      h1{font-size:18px}
+      .subtitle{font-size:11px}
+      .top-actions .btn{font-size:12px;padding:7px 9px}
+      main{grid-template-columns:1fr 270px}
+      .template-panel{grid-template-columns:1fr 310px}
+      .template-grid{grid-template-columns:1fr 1fr}
+      .record-top{grid-template-columns:1fr 1fr}
+      .records-tools{grid-template-columns:1fr 130px 130px 120px auto}
+      .history-tools{grid-template-columns:1fr 1fr auto}
+      .quick-panel{max-height:126px}
+    }
+
+    @media (max-width:900px){
+      html,body{overflow:auto;height:auto}
+      .app{height:auto;min-height:100vh;grid-template-rows:auto auto}
+      header{flex-direction:column;align-items:flex-start}
+      .subtitle{white-space:normal}
+      main{grid-template-columns:1fr}
+      .main-card{min-height:850px}
+      .side-card{display:none}
+      .template-panel{grid-template-columns:1fr;grid-template-rows:minmax(420px,1fr) 260px}
+      .record-work{grid-template-columns:1fr;grid-template-rows:300px 1fr}
+      .notes-grid{grid-template-columns:1fr;grid-template-rows:repeat(4,130px)}
+      .records-tools{grid-template-columns:1fr 1fr}
+      .history-tools{grid-template-columns:1fr}
+      .archive-action-box{justify-content:flex-start}
+      .archive-card-head{grid-template-columns:1fr}
+      .archive-actions{justify-content:flex-start}
+      .tab{padding:7px 9px;font-size:13px}
+    }
+
+    @media print{
+      html,body{
+        width:auto;
+        height:auto;
+        margin:0;
+        background:#fff;
+        overflow:visible;
+        color:#000;
+        font-family:"Noto Sans TC","Microsoft JhengHei",Arial,sans-serif;
+      }
+
+      .app{
+        height:auto;
+        display:block;
+        padding:0;
+      }
+
+      header,.tabs,.footer,.side-card,.records-tools,.row-actions,.item-actions,.no-print{
+        display:none!important;
+      }
+
+      .main-card,.panel,.panel.active,.table-wrap{
+        display:block!important;
+        overflow:visible!important;
+        border:0!important;
+        box-shadow:none!important;
+        padding:0!important;
+        background:#fff!important;
+      }
+
+      .panel:not(#recordsPanel){display:none!important}
+      .main-card{border:0!important}
+
+      .print-only{
+        display:block!important;
+      }
+
+      .print-header{
+        text-align:center;
+        border-bottom:2px solid #111;
+        padding-bottom:6px;
+        margin-bottom:8px;
+      }
+
+      .print-header h1{
+        display:block;
+        font-size:28px;
+        letter-spacing:2px;
+        margin:0 0 6px;
+        white-space:normal;
+      }
+
+      .print-header .sub{
+        font-size:15px;
+        color:#333;
+      }
+
+      .print-meta{
+        width:100%;
+        border-collapse:collapse;
+        margin-bottom:8px;
+      }
+
+      .print-meta td{
+        border:1px solid #333;
+        padding:7px 8px;
+        font-size:14.5px;
+        line-height:1.45;
+      }
+
+      .print-label{
+        width:82px;
+        background:#eee;
+        font-weight:700;
+        text-align:center;
+      }
+
+      .standalone-test-box{
+        border:1px solid #333;
+        border-radius:0;
+        margin-bottom:8px;
+        display:block;
+        page-break-inside:avoid;
+      }
+
+      .standalone-test-head{
+        display:block;
+        border-bottom:1px solid #333;
+        background:#eee!important;
+        padding:7px 8px;
+        font-size:15px;
+        color:#000;
+      }
+
+      .standalone-test-content{
+        max-height:120px;
+        overflow:hidden;
+        padding:8px 10px;
+        font-size:14.5px;
+        line-height:1.55;
+        color:#000;
+      }
+
+      table{
+        min-width:0;
+        width:100%;
+        border-collapse:collapse;
+        table-layout:fixed;
+      }
+
+      th,td{
+        border:1px solid #333;
+        padding:6px 5px;
+        font-size:13px;
+        line-height:1.45;
+        vertical-align:top;
+        color:#000;
+      }
+
+      th{
+        position:static;
+        background:#e9e9e9!important;
+        color:#000;
+        font-weight:700;
+        text-align:center;
+      }
+
+      .records-table th:nth-child(1){width:10%}
+      .records-table th:nth-child(2){width:13%}
+      .records-table th:nth-child(3){width:13%}
+      .records-table th:nth-child(4){width:18%}
+      .records-table th:nth-child(6){width:9%}
+      .records-table th:nth-child(7){width:37%}
+
+      .records-table td:nth-child(5),.records-table th:nth-child(5),
+      .records-table td:nth-child(8),.records-table th:nth-child(8){display:none!important}
+
+      .preview-line{
+        white-space:pre-line;
+        max-height:none;
+        overflow:visible;
+        line-height:1.35;
+      }
+
+      .pill{
+        border:0;
+        background:transparent!important;
+        color:#000!important;
+        padding:0;
+        font-size:13px;
+      }
+
+      .signature-row{
+        display:grid!important;
+        grid-template-columns:1fr 1fr 1fr;
+        gap:14px;
+        margin-top:18px;
+        font-size:14px;
+      }
+
+      .signature-cell{
+        border-bottom:1px solid #000;
+        padding-bottom:18px;
+      }
+
+      .print-footer-note{
+        margin-top:8px;
+        font-size:12.5px;
+        color:#333;
+      }
+
+      @page{
+        size:A4 landscape;
+        margin:10mm;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header>
+      <div class="brand">
+        <div class="logo">☎</div>
+        <div>
+          <h1>英文電話測驗紀錄簿</h1>
+          <div class="subtitle">歷史檔案版｜可將過期紀錄依班級整班歸檔，不必刪除資料</div>
+        </div>
+      </div>
+      <div class="top-actions">
+        <button class="btn primary" id="printBtn" type="button">列印正式紀錄表</button>
+        <button class="btn good" id="exportCsvBtn" type="button">匯出 CSV</button>
+        <button class="btn ghost" id="exportJsonBtn" type="button">備份 JSON</button>
+        <label class="btn ghost" for="importFile">匯入 JSON</label>
+        <input id="importFile" type="file" accept=".json">
+      </div>
+    </header>
+
+    <main>
+      <section class="main-card">
+        <nav class="tabs">
+          <button class="tab active" data-tab="template" type="button">① 班級測驗內容</button>
+          <button class="tab" data-tab="record" type="button">② 學生紀錄</button>
+          <button class="tab" data-tab="records" type="button">③ 紀錄列表 / 列印</button>
+          <button class="tab" data-tab="history" type="button">④ 歷史檔案</button>
+          <div class="tab-spacer"></div>
+          <div class="mode-label" id="modeLabel">新增班級測驗模板</div>
+        </nav>
+
+        <section id="templatePanel" class="panel template-panel active">
+          <div class="template-editor">
+            <div>
+              <div class="section-title">建立同一班共用的測驗內容</div>
+              <div class="template-grid">
+                <div>
+                  <label>班級 / 年級</label>
+                  <input id="tplClass" placeholder="例如：G5 / 國一">
+                </div>
+                <div>
+                  <label>測驗主題</label>
+                  <input id="tplTitle" placeholder="例如：Unit 3 Food">
+                </div>
+                <div>
+                  <label>測驗類型</label>
+                  <select id="tplType">
+                    <option>電話口說</option>
+                    <option>句型問答</option>
+                    <option>單字拼讀</option>
+                    <option>閱讀朗讀</option>
+                    <option>全民英檢口說</option>
+                    <option>其他</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div class="template-content">
+              <label>測驗內容：單字與句子題庫</label>
+              <textarea id="templateContent" placeholder="同一班的測驗內容只要輸入一次，例如：
+
+單字：
+1. rice
+2. noodles
+3. soup
+4. chicken
+
+句子：
+1. What do you want for lunch?
+2. I want some rice, please.
+3. Do you want some soup?
+4. Yes, please. / No, thank you."></textarea>
+            </div>
+          </div>
+
+          <aside class="template-list">
+            <div class="list-head">
+              <span>已建立的班級測驗</span>
+              <button class="btn small ghost" id="newTemplateBtn" type="button">新增</button>
+            </div>
+            <div class="list-body" id="templateList"></div>
+          </aside>
+        </section>
+
+        <section id="recordPanel" class="panel record-panel">
+          <div class="record-top">
+            <div>
+              <label>選擇班級測驗內容</label>
+              <select id="recordTemplate"></select>
+            </div>
+            <div>
+              <label>測驗日期</label>
+              <input id="recordDate" type="date">
+            </div>
+            <div>
+              <label>測驗時間</label>
+              <input id="recordTime" type="time">
+            </div>
+            <div>
+              <label>學生姓名</label>
+              <input id="studentName" placeholder="例如：Kevin">
+            </div>
+          </div>
+
+          <div class="record-work">
+            <div class="box">
+              <div class="box-head">
+                <span>本班測驗題目預覽</span>
+                <button class="btn small ghost" id="goTemplateBtn" type="button">編輯題目</button>
+              </div>
+              <div class="box-body">
+                <div id="testPreview" class="test-preview muted">請先選擇或建立班級測驗內容。</div>
+              </div>
+            </div>
+
+            <div class="student-form">
+              <div class="student-grid">
+                <div>
+                  <label>分數</label>
+                  <input id="score" type="number" min="0" max="100" placeholder="0-100">
+                </div>
+                <div>
+                  <label>等第</label>
+                  <select id="level">
+                    <option value="">自動</option>
+                    <option>A</option>
+                    <option>B</option>
+                    <option>C</option>
+                    <option>D</option>
+                  </select>
+                </div>
+                <div>
+                  <label>電話號碼</label>
+                  <input id="phone" placeholder="可不填">
+                </div>
+                <div>
+                  <label>測驗老師</label>
+                  <input id="teacher" placeholder="例如：Eddie">
+                </div>
+              </div>
+
+              <div class="quick-panel">
+                <div class="quick-group">
+                  <span class="quick-title">優點</span>
+                  <button class="btn small ghost quick-btn" data-target="performance" data-text="發音清楚。" type="button">發音清楚</button>
+                  <button class="btn small ghost quick-btn" data-target="performance" data-text="回答流利。" type="button">回答流利</button>
+                  <button class="btn small ghost quick-btn" data-target="performance" data-text="能用完整句回答。" type="button">完整句佳</button>
+                  <button class="btn small ghost quick-btn" data-target="performance" data-text="聽題反應快。" type="button">反應快</button>
+                  <button class="btn small ghost quick-btn" data-target="performance" data-text="單字熟悉度佳。" type="button">單字熟</button>
+                  <button class="btn small ghost quick-btn" data-target="performance" data-text="態度認真，願意嘗試回答。" type="button">態度認真</button>
+                </div>
+                <div class="quick-group">
+                  <span class="quick-title">需加強</span>
+                  <button class="btn small ghost quick-btn" data-target="errors" data-text="發音不夠清楚。" type="button">發音不清</button>
+                  <button class="btn small ghost quick-btn" data-target="errors" data-text="句子回答不完整。" type="button">句子不完整</button>
+                  <button class="btn small ghost quick-btn" data-target="errors" data-text="聽題後需要較多提示。" type="button">需提示</button>
+                  <button class="btn small ghost quick-btn" data-target="errors" data-text="容易忘記句尾 please / thank you。" type="button">禮貌語</button>
+                  <button class="btn small ghost quick-btn" data-target="errors" data-text="單字辨識仍需加強。" type="button">單字辨識</button>
+                  <button class="btn small ghost quick-btn" data-target="errors" data-text="文法使用仍不穩定。" type="button">文法不穩</button>
+                </div>
+                <div class="quick-group">
+                  <span class="quick-title">發音</span>
+                  <button class="btn small ghost quick-btn" data-target="nextFocus" data-text="下次加強母音發音。" type="button">母音</button>
+                  <button class="btn small ghost quick-btn" data-target="nextFocus" data-text="下次加強子音結尾發音。" type="button">字尾音</button>
+                  <button class="btn small ghost quick-btn" data-target="nextFocus" data-text="下次加強 th / s / z 的發音辨識。" type="button">th/s/z</button>
+                  <button class="btn small ghost quick-btn" data-target="nextFocus" data-text="下次加強自然發音拼讀。" type="button">自然發音</button>
+                  <button class="btn small ghost quick-btn" data-target="nextFocus" data-text="下次加強重音與語調。" type="button">重音語調</button>
+                </div>
+                <div class="quick-group">
+                  <span class="quick-title">下次</span>
+                  <button class="btn small ghost quick-btn" data-target="nextFocus" data-text="下次加強完整句回答。" type="button">完整句</button>
+                  <button class="btn small ghost quick-btn" data-target="nextFocus" data-text="下次加強聽題反應速度。" type="button">反應速度</button>
+                  <button class="btn small ghost quick-btn" data-target="nextFocus" data-text="下次加強單字複習。" type="button">單字複習</button>
+                  <button class="btn small ghost quick-btn" data-target="nextFocus" data-text="下次加強問答句型轉換。" type="button">問答轉換</button>
+                  <button class="btn small ghost quick-btn" data-target="nextFocus" data-text="下次加強自信開口。" type="button">開口自信</button>
+                </div>
+                <div class="quick-group">
+                  <span class="quick-title">家長</span>
+                  <button class="btn small ghost quick-btn" data-target="note" data-text="建議每天聽讀 5 分鐘。" type="button">聽讀5分</button>
+                  <button class="btn small ghost quick-btn" data-target="note" data-text="建議在家複習本次單字。" type="button">複習單字</button>
+                  <button class="btn small ghost quick-btn" data-target="note" data-text="建議練習用完整句回答。" type="button">完整句練習</button>
+                  <button class="btn small ghost quick-btn" data-target="note" data-text="已提醒下次電話測驗範圍。" type="button">提醒範圍</button>
+                </div>
+              </div>
+
+              <div class="notes-grid">
+                <div class="note-box">
+                  <label>學生表現</label>
+                  <textarea id="performance" placeholder="例如：能聽懂問題，回答速度快。"></textarea>
+                </div>
+                <div class="note-box">
+                  <label>錯誤紀錄</label>
+                  <textarea id="errors" placeholder="例如：want some rice 發音不清楚。"></textarea>
+                </div>
+                <div class="note-box">
+                  <label>下次加強重點</label>
+                  <textarea id="nextFocus" placeholder="例如：句尾 please、複數 s、自然發音。"></textarea>
+                </div>
+                <div class="note-box">
+                  <label>家長聯絡 / 備註</label>
+                  <textarea id="note" placeholder="例如：已提醒家長每天聽讀 5 分鐘。"></textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="recordsPanel" class="panel records-panel">
+          <div class="print-only print-header">
+            <h1>英文電話測驗紀錄表</h1>
+            <div class="sub">Telephone English Test Record Sheet</div>
+          </div>
+
+          <table class="print-only print-meta">
+            <tr>
+              <td class="print-label">列印日期</td>
+              <td id="printDate">—</td>
+              <td class="print-label">測驗範圍</td>
+              <td id="printScope" colspan="3">—</td>
+            </tr>
+            <tr>
+              <td class="print-label">紀錄筆數</td>
+              <td id="printTotal">—</td>
+              <td class="print-label">任課老師</td>
+              <td id="printTeachers" colspan="3">—</td>
+            </tr>
+          </table>
+
+          <div class="records-tools">
+            <div>
+              <label>搜尋</label>
+              <input id="search" placeholder="學生 / 班級 / 主題 / 備註">
+            </div>
+            <div>
+              <label>班級測驗</label>
+              <select id="filterTemplate"></select>
+            </div>
+            <div>
+              <label>等第</label>
+              <select id="filterLevel">
+                <option value="">全部等第</option>
+                <option>A</option>
+                <option>B</option>
+                <option>C</option>
+                <option>D</option>
+              </select>
+            </div>
+            <div>
+              <label>排序</label>
+              <select id="sortBy">
+                <option value="newest">日期新到舊</option>
+                <option value="oldest">日期舊到新</option>
+                <option value="scoreHigh">分數高到低</option>
+                <option value="scoreLow">分數低到高</option>
+                <option value="student">學生姓名</option>
+              </select>
+            </div>
+            <button class="btn ghost" id="resetFilterBtn" type="button">重設</button>
+          </div>
+
+          <div class="standalone-test-box" id="standaloneTestBox">
+            <div class="standalone-test-head">
+              <span id="standaloneTestTitle">本次測驗內容</span>
+              <span class="small-note no-print">學生列表不重複顯示題目，列印時會保留此區塊。</span>
+            </div>
+            <div class="standalone-test-content" id="standaloneTestContent">請先在「班級測驗」篩選器中選擇一個班級測驗，即可在此處獨立顯示全班共同測驗內容。</div>
+          </div>
+
+          <div class="table-wrap">
+            <table class="records-table">
+              <thead>
+                <tr>
+                  <th>日期</th>
+                  <th>學生</th>
+                  <th>班級</th>
+                  <th>測驗主題</th>
+                  <th>分數</th>
+                  <th>等第</th>
+                  <th>表現 / 錯誤 / 下次加強 / 備註</th>
+                  <th>操作</th>
+                </tr>
+              </thead>
+              <tbody id="recordTable"></tbody>
+            </table>
+            <div id="emptyRecords" class="empty">目前沒有學生測驗紀錄。</div>
+          </div>
+
+          <div class="print-only signature-row">
+            <div class="signature-cell">任課老師簽名：</div>
+            <div class="signature-cell">主任 / 主管簽核：</div>
+            <div class="signature-cell">日期：</div>
+          </div>
+          <div class="print-only print-footer-note">
+            備註：本表由英文電話測驗紀錄簿自動產生；學生表格不重複列出共同題目，測驗內容統一顯示於表格上方。
+          </div>
+        </section>
+
+
+
+        <section id="historyPanel" class="panel history-panel">
+          <div class="history-tools">
+            <div>
+              <label>選擇要整班歸檔的班級</label>
+              <select id="archiveClassSelect"></select>
+            </div>
+            <div>
+              <label>歸檔備註</label>
+              <input id="archiveNote" placeholder="例如：2025 舊班級、上學期紀錄、已結束課程">
+            </div>
+            <div class="archive-action-box">
+              <button class="btn primary" id="archiveClassBtn" type="button">整班歸檔</button>
+              <button class="btn ghost" id="refreshArchiveBtn" type="button">更新清單</button>
+            </div>
+            <div class="archive-target-info" id="archiveTargetInfo">請選擇班級後再歸檔。歸檔後，該班級的班級測驗與學生紀錄會移到歷史檔案，不會出現在目前紀錄列表，也不會被刪除。</div>
+          </div>
+
+          <div class="history-list" id="historyList"></div>
+        </section>
+        <footer class="footer">
+          <div class="footer-left">
+            <button class="btn ghost" id="prevBtn" type="button">上一步</button>
+            <button class="btn ghost" id="nextBtn" type="button">下一步</button>
+            <span class="status" id="statusText">資料儲存在本機瀏覽器；建議定期備份 JSON。</span>
+          </div>
+          <div class="footer-right">
+            <button class="btn bad" id="deleteAllBtn" type="button">全部刪除</button>
+            <button class="btn ghost" id="clearBtn" type="button">清空目前輸入</button>
+            <button class="btn primary" id="saveBtn" type="button">儲存</button>
+          </div>
+        </footer>
+      </section>
+
+      <aside class="side-card">
+        <div class="side-title">
+          <h2>目前狀態</h2>
+          <button class="btn small ghost" id="sideRecordsBtn" type="button">看列表</button>
+        </div>
+        <div class="stats">
+          <div class="stat">
+            <div class="label">測驗模板</div>
+            <div class="num" id="statTemplates">0</div>
+          </div>
+          <div class="stat">
+            <div class="label">目前紀錄</div>
+            <div class="num" id="statRecords">0</div>
+          </div>
+          <div class="stat">
+            <div class="label">歷史班級</div>
+            <div class="num" id="statAvg">0</div>
+          </div>
+          <div class="stat">
+            <div class="label">歷史筆數</div>
+            <div class="num" id="statWeak">0</div>
+          </div>
+        </div>
+        <div class="summary">
+          <div class="summary-box">
+            <h3>目前選擇的測驗</h3>
+            <div class="summary-line"><b>班級：</b><span id="sumClass">—</span></div>
+            <div class="summary-line"><b>主題：</b><span id="sumTitle">—</span></div>
+            <div class="summary-line"><b>類型：</b><span id="sumType">—</span></div>
+          </div>
+          <div class="summary-box">
+            <h3>列印提醒</h3>
+            <div class="small-note">
+              到「紀錄列表 / 列印」先選班級測驗，再按「列印正式紀錄表」。測驗內容會獨立放在表格上方，不會重複塞進每位學生紀錄。
+            </div>
+          </div>
+        </div>
+      </aside>
+    </main>
+  </div>
+
+  <script>
+    "use strict";
+
+    const STORE_KEY = "phoneEnglishRecordBook_templateVersion_v2";
+    const tabs = ["template", "record", "records", "history"];
+    let currentTab = "template";
+    let editingTemplateId = "";
+    let editingRecordId = "";
+
+    let state = loadState();
+
+    function loadState(){
+      const empty = { templates: [], records: [], archives: [] };
+      try{
+        const raw = localStorage.getItem(STORE_KEY);
+        if(!raw) return empty;
+        return normalizeState(JSON.parse(raw));
+      }catch(error){
+        return empty;
+      }
+    }
+
+    function normalizeState(data){
+      const templates = Array.isArray(data && data.templates) ? data.templates : [];
+      const records = Array.isArray(data && data.records) ? data.records : [];
+      const archives = Array.isArray(data && data.archives) ? data.archives : [];
+
+      return {
+        templates: templates.map(function(t){
+          return Object.assign({}, t, {
+            archived: Boolean(t.archived),
+            archiveId: t.archiveId || "",
+            archivedAt: t.archivedAt || ""
+          });
+        }),
+        records: records.map(function(r){
+          return Object.assign({}, r, {
+            archived: Boolean(r.archived),
+            archiveId: r.archiveId || "",
+            archivedAt: r.archivedAt || ""
+          });
+        }),
+        archives: archives.map(function(a){
+          return Object.assign({
+            id: id("arc"),
+            className: "未命名班級",
+            archivedAt: new Date().toISOString(),
+            note: "",
+            templateIds: [],
+            recordIds: []
+          }, a);
+        })
+      };
+    }
+
+    function saveState(){
+      localStorage.setItem(STORE_KEY, JSON.stringify(state));
+    }
+
+    function id(prefix){
+      return prefix + "_" + Date.now().toString(36) + "_" + Math.random().toString(36).slice(2,8);
+    }
+
+    function el(idName){
+      return document.getElementById(idName);
+    }
+
+    function today(){
+      return new Date().toISOString().slice(0,10);
+    }
+
+    function nowTime(){
+      const d = new Date();
+      return String(d.getHours()).padStart(2,"0") + ":" + String(d.getMinutes()).padStart(2,"0");
+    }
+
+    function formatDateTime(iso){
+      if(!iso) return "—";
+      try{
+        return new Date(iso).toLocaleString("zh-TW");
+      }catch(error){
+        return String(iso);
+      }
+    }
+
+    function safe(text){
+      return String(text || "").replace(/[&<>"']/g, function(ch){
+        return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"}[ch];
+      });
+    }
+
+    function shortText(text, max){
+      const t = String(text || "").trim();
+      if(!t) return "—";
+      return t.length > max ? t.slice(0,max) + "…" : t;
+    }
+
+    function activeTemplates(){
+      return state.templates.filter(function(t){ return !t.archived; });
+    }
+
+    function activeRecords(){
+      return state.records.filter(function(r){ return !r.archived; });
+    }
+
+    function archivedRecords(){
+      return state.records.filter(function(r){ return r.archived; });
+    }
+
+    function getTemplate(templateId){
+      return state.templates.find(function(t){ return t.id === templateId; }) || null;
+    }
+
+    function selectedRecordTemplate(){
+      const selectedId = el("recordTemplate").value;
+      const template = getTemplate(selectedId);
+      return template && !template.archived ? template : null;
+    }
+
+    function recordClassName(record){
+      const template = getTemplate(record.templateId);
+      return (template && template.className) || record.classNameSnapshot || "";
+    }
+
+    function recordTitle(record){
+      const template = getTemplate(record.templateId);
+      return (template && template.title) || record.titleSnapshot || "";
+    }
+
+    function recordType(record){
+      const template = getTemplate(record.templateId);
+      return (template && template.type) || record.typeSnapshot || "";
+    }
+
+    function recordContent(record){
+      const template = getTemplate(record.templateId);
+      return (template && template.content) || record.contentSnapshot || "";
+    }
+
+    function autoLevel(score){
+      const n = Number(score);
+      if(Number.isNaN(n)) return "";
+      if(n >= 90) return "A";
+      if(n >= 80) return "B";
+      if(n >= 60) return "C";
+      return "D";
+    }
+
+    function showStatus(message){
+      el("statusText").textContent = message;
+    }
+
+    function switchTab(name){
+      currentTab = name;
+      document.querySelectorAll(".tab").forEach(function(btn){
+        btn.classList.toggle("active", btn.dataset.tab === name);
+      });
+      document.querySelectorAll(".panel").forEach(function(panel){
+        panel.classList.remove("active");
+      });
+      el(name + "Panel").classList.add("active");
+
+      if(name === "template"){
+        el("modeLabel").textContent = editingTemplateId ? "編輯班級測驗模板" : "新增班級測驗模板";
+        el("saveBtn").textContent = "儲存班級測驗";
+      }else if(name === "record"){
+        el("modeLabel").textContent = editingRecordId ? "編輯學生紀錄" : "新增學生紀錄";
+        el("saveBtn").textContent = "儲存學生紀錄";
+        updateTestPreview();
+      }else if(name === "records"){
+        el("modeLabel").textContent = "查看目前學生測驗紀錄";
+        el("saveBtn").textContent = "儲存";
+        renderRecords();
+      }else{
+        el("modeLabel").textContent = "歷史檔案：整班歸檔 / 還原";
+        el("saveBtn").textContent = "儲存";
+        renderHistory();
+      }
+    }
+
+    function nextTab(){
+      const i = tabs.indexOf(currentTab);
+      switchTab(tabs[Math.min(i + 1, tabs.length - 1)]);
+    }
+
+    function prevTab(){
+      const i = tabs.indexOf(currentTab);
+      switchTab(tabs[Math.max(i - 1, 0)]);
+    }
+
+    function clearTemplateInputs(){
+      editingTemplateId = "";
+      el("tplClass").value = "";
+      el("tplTitle").value = "";
+      el("tplType").value = "電話口說";
+      el("templateContent").value = "";
+      showStatus("已清空班級測驗輸入區。");
+      renderTemplates();
+      updateSummary();
+      switchTab("template");
+    }
+
+    function clearRecordInputs(keepTemplate){
+      editingRecordId = "";
+      el("recordDate").value = today();
+      el("recordTime").value = nowTime();
+      el("studentName").value = "";
+      el("score").value = "";
+      el("level").value = "";
+      el("phone").value = "";
+      el("teacher").value = "";
+      el("performance").value = "";
+      el("errors").value = "";
+      el("nextFocus").value = "";
+      el("note").value = "";
+      if(!keepTemplate && activeTemplates().length){
+        el("recordTemplate").value = activeTemplates()[0].id;
+      }
+      updateTestPreview();
+      updateSummary();
+    }
+
+    function clearCurrentInputs(){
+      if(currentTab === "template"){
+        clearTemplateInputs();
+      }else if(currentTab === "record"){
+        clearRecordInputs(true);
+        showStatus("已清空學生紀錄輸入區，保留目前班級測驗。");
+      }else if(currentTab === "records"){
+        resetFilters();
+      }else{
+        el("archiveNote").value = "";
+        renderHistory();
+        showStatus("已清空歸檔備註並更新歷史檔案畫面。");
+      }
+    }
+
+    function saveTemplate(){
+      const className = el("tplClass").value.trim();
+      const title = el("tplTitle").value.trim();
+      const type = el("tplType").value;
+      const content = el("templateContent").value.trim();
+
+      if(!className || !title || !content){
+        alert("請至少填寫「班級 / 年級」、「測驗主題」和「測驗內容」。");
+        switchTab("template");
+        return;
+      }
+
+      const item = {
+        id: editingTemplateId || id("tpl"),
+        className: className,
+        title: title,
+        type: type,
+        content: content,
+        archived: false,
+        archiveId: "",
+        archivedAt: "",
+        updatedAt: new Date().toISOString()
+      };
+
+      const index = state.templates.findIndex(function(t){ return t.id === item.id; });
+      if(index >= 0){
+        state.templates[index] = Object.assign({}, state.templates[index], item);
+      }else{
+        state.templates.push(item);
+      }
+
+      saveState();
+      editingTemplateId = "";
+      renderAll();
+
+      el("recordTemplate").value = item.id;
+      updateTestPreview();
+      showStatus("已儲存班級測驗：「" + className + "｜" + title + "」。接著可到學生紀錄輸入每位學生表現。");
+      clearTemplateInputs();
+      switchTab("record");
+    }
+
+    function editTemplate(templateId){
+      const t = getTemplate(templateId);
+      if(!t || t.archived) return;
+      editingTemplateId = t.id;
+      el("tplClass").value = t.className || "";
+      el("tplTitle").value = t.title || "";
+      el("tplType").value = t.type || "電話口說";
+      el("templateContent").value = t.content || "";
+      renderTemplates();
+      updateSummary();
+      switchTab("template");
+    }
+
+    function useTemplate(templateId){
+      const t = getTemplate(templateId);
+      if(!t || t.archived) return;
+      el("recordTemplate").value = templateId;
+      clearRecordInputs(true);
+      el("recordTemplate").value = templateId;
+      updateTestPreview();
+      updateSummary();
+      switchTab("record");
+    }
+
+    function deleteTemplate(templateId){
+      const used = state.records.some(function(r){ return r.templateId === templateId; });
+      const message = used
+        ? "這個班級測驗已有學生紀錄使用。刪除後，舊紀錄仍會保留題目快照，但無法再選用此模板。確定刪除？"
+        : "確定刪除這個班級測驗模板嗎？";
+      if(!confirm(message)) return;
+
+      state.templates = state.templates.filter(function(t){ return t.id !== templateId; });
+      if(editingTemplateId === templateId) clearTemplateInputs();
+      saveState();
+      renderAll();
+      showStatus("已刪除班級測驗模板。");
+    }
+
+    function saveRecord(){
+      const template = selectedRecordTemplate();
+      const student = el("studentName").value.trim();
+      const date = el("recordDate").value;
+
+      if(!template){
+        alert("請先選擇或建立一個班級測驗內容。");
+        switchTab("template");
+        return;
+      }
+
+      if(!student || !date){
+        alert("請至少填寫「測驗日期」和「學生姓名」。");
+        switchTab("record");
+        return;
+      }
+
+      const score = el("score").value.trim();
+      const level = el("level").value || (score !== "" ? autoLevel(score) : "");
+
+      const item = {
+        id: editingRecordId || id("rec"),
+        templateId: template.id,
+        date: date,
+        time: el("recordTime").value,
+        student: student,
+        phone: el("phone").value.trim(),
+        teacher: el("teacher").value.trim(),
+        score: score,
+        level: level,
+        performance: el("performance").value.trim(),
+        errors: el("errors").value.trim(),
+        nextFocus: el("nextFocus").value.trim(),
+        note: el("note").value.trim(),
+        classNameSnapshot: template.className || "",
+        titleSnapshot: template.title || "",
+        typeSnapshot: template.type || "",
+        contentSnapshot: template.content || "",
+        archived: false,
+        archiveId: "",
+        archivedAt: "",
+        updatedAt: new Date().toISOString()
+      };
+
+      const index = state.records.findIndex(function(r){ return r.id === item.id; });
+      if(index >= 0){
+        state.records[index] = Object.assign({}, state.records[index], item);
+      }else{
+        state.records.push(item);
+      }
+
+      saveState();
+      editingRecordId = "";
+      renderAll();
+      showStatus("已儲存學生紀錄：" + student + "。");
+      clearRecordInputs(true);
+      switchTab("records");
+    }
+
+    function editRecord(recordId){
+      const r = state.records.find(function(item){ return item.id === recordId; });
+      if(!r || r.archived) return;
+
+      editingRecordId = r.id;
+      const template = getTemplate(r.templateId);
+      if(template && !template.archived){
+        el("recordTemplate").value = r.templateId;
+      }
+
+      el("recordDate").value = r.date || today();
+      el("recordTime").value = r.time || nowTime();
+      el("studentName").value = r.student || "";
+      el("score").value = r.score || "";
+      el("level").value = r.level || "";
+      el("phone").value = r.phone || "";
+      el("teacher").value = r.teacher || "";
+      el("performance").value = r.performance || "";
+      el("errors").value = r.errors || "";
+      el("nextFocus").value = r.nextFocus || "";
+      el("note").value = r.note || "";
+
+      updateTestPreview(r);
+      updateSummary();
+      switchTab("record");
+    }
+
+    function deleteRecord(recordId){
+      if(!confirm("確定刪除這筆學生測驗紀錄嗎？")) return;
+      state.records = state.records.filter(function(r){ return r.id !== recordId; });
+      saveState();
+      renderAll();
+      showStatus("已刪除學生紀錄。");
+    }
+
+    function deleteAll(){
+      if(!state.templates.length && !state.records.length && !state.archives.length) return;
+      if(!confirm("確定刪除全部班級測驗模板、學生紀錄與歷史檔案嗎？此動作無法復原，建議先備份 JSON。")) return;
+
+      state = { templates: [], records: [], archives: [] };
+      editingTemplateId = "";
+      editingRecordId = "";
+      saveState();
+      renderAll();
+      clearTemplateInputs();
+      clearRecordInputs(false);
+      showStatus("已刪除全部資料。");
+      switchTab("template");
+    }
+
+    function addQuickText(targetId, text){
+      const target = el(targetId);
+      const old = target.value.trim();
+      target.value = old ? old + "\n" + text : text;
+      target.focus();
+    }
+
+    function updateTestPreview(recordForSnapshot){
+      const template = selectedRecordTemplate();
+      let content = "";
+      if(template){
+        content = template.content || "";
+      }else if(recordForSnapshot){
+        content = recordForSnapshot.contentSnapshot || "";
+      }
+
+      if(content){
+        el("testPreview").classList.remove("muted");
+        el("testPreview").textContent = content;
+      }else{
+        el("testPreview").classList.add("muted");
+        el("testPreview").textContent = "請先選擇或建立班級測驗內容。";
+      }
+      updateSummary();
+    }
+
+    function updateSummary(){
+      const template = selectedRecordTemplate();
+      el("sumClass").textContent = template ? template.className : "—";
+      el("sumTitle").textContent = template ? template.title : "—";
+      el("sumType").textContent = template ? template.type : "—";
+    }
+
+    function resetFilters(){
+      el("search").value = "";
+      el("filterTemplate").value = "";
+      el("filterLevel").value = "";
+      el("sortBy").value = "newest";
+      renderRecords();
+      showStatus("已重設搜尋與篩選。");
+    }
+
+    function filteredRecords(){
+      const q = el("search").value.trim().toLowerCase();
+      const filterTemplate = el("filterTemplate").value;
+      const filterLevel = el("filterLevel").value;
+      const sortBy = el("sortBy").value;
+
+      let list = activeRecords().slice();
+
+      if(filterTemplate){
+        list = list.filter(function(r){ return r.templateId === filterTemplate; });
+      }
+
+      if(filterLevel){
+        list = list.filter(function(r){ return r.level === filterLevel; });
+      }
+
+      if(q){
+        list = list.filter(function(r){
+          const text = [
+            r.student, r.phone, r.teacher, r.score, r.level,
+            recordClassName(r), recordTitle(r), recordType(r), recordContent(r),
+            r.performance, r.errors, r.nextFocus, r.note
+          ].join(" ").toLowerCase();
+          return text.includes(q);
+        });
+      }
+
+      list.sort(function(a,b){
+        if(sortBy === "oldest") return String(a.date + a.time).localeCompare(String(b.date + b.time));
+        if(sortBy === "scoreHigh") return Number(b.score || -1) - Number(a.score || -1);
+        if(sortBy === "scoreLow") return Number(a.score || 999) - Number(b.score || 999);
+        if(sortBy === "student") return String(a.student || "").localeCompare(String(b.student || ""), "zh-Hant");
+        return String(b.date + b.time).localeCompare(String(a.date + a.time));
+      });
+
+      return list;
+    }
+
+    function renderStandaloneTestBox(){
+      const filterTemplateId = el("filterTemplate").value;
+      const selectedTemplate = getTemplate(filterTemplateId);
+
+      if(selectedTemplate && !selectedTemplate.archived){
+        el("standaloneTestTitle").textContent = "本次測驗內容｜" + selectedTemplate.className + "｜" + selectedTemplate.title;
+        el("standaloneTestContent").textContent = selectedTemplate.content || "—";
+        return;
+      }
+
+      const list = filteredRecords();
+      const templateIds = Array.from(new Set(list.map(function(r){ return r.templateId; }).filter(Boolean)));
+
+      if(templateIds.length === 1){
+        const onlyTemplate = getTemplate(templateIds[0]);
+        if(onlyTemplate){
+          el("standaloneTestTitle").textContent = "本次測驗內容｜" + onlyTemplate.className + "｜" + onlyTemplate.title;
+          el("standaloneTestContent").textContent = onlyTemplate.content || "—";
+          return;
+        }
+      }
+
+      el("standaloneTestTitle").textContent = "本次測驗內容";
+      el("standaloneTestContent").textContent = "目前顯示多個班級測驗或尚未篩選班級測驗。若要列印正式表格，建議先在「班級測驗」篩選器中選擇一個班級測驗，測驗內容會在此處獨立顯示。";
+    }
+
+    function renderTemplates(){
+      const box = el("templateList");
+      const list = activeTemplates();
+      if(!list.length){
+        box.innerHTML = '<div class="empty">尚未建立目前使用中的班級測驗內容。<br>請先在左側輸入同一班共用的題目，或到歷史檔案還原舊班級。</div>';
+        return;
+      }
+
+      box.innerHTML = list.map(function(t){
+        const active = t.id === editingTemplateId ? " active" : "";
+        return [
+          '<div class="template-item' + active + '">',
+          '<div class="template-name">' + safe(t.className) + '｜' + safe(t.title) + '</div>',
+          '<div class="template-meta">' + safe(t.type) + '｜題目字數：約 ' + String((t.content || "").length) + ' 字</div>',
+          '<div class="item-actions">',
+          '<button class="btn small primary use-template-btn" type="button" data-id="' + safe(t.id) + '">選用</button>',
+          '<button class="btn small ghost edit-template-btn" type="button" data-id="' + safe(t.id) + '">編輯</button>',
+          '<button class="btn small bad delete-template-btn" type="button" data-id="' + safe(t.id) + '">刪除</button>',
+          '</div>',
+          '</div>'
+        ].join("");
+      }).join("");
+    }
+
+    function renderTemplateSelects(){
+      const list = activeTemplates();
+      const options = list.map(function(t){
+        return '<option value="' + safe(t.id) + '">' + safe(t.className) + '｜' + safe(t.title) + '</option>';
+      }).join("");
+
+      const oldRecordValue = el("recordTemplate").value;
+      const oldFilterValue = el("filterTemplate").value;
+
+      el("recordTemplate").innerHTML = list.length
+        ? options
+        : '<option value="">請先建立班級測驗內容，或到歷史檔案還原舊班級</option>';
+
+      el("filterTemplate").innerHTML = '<option value="">全部目前班級測驗</option>' + options;
+
+      if(list.some(function(t){ return t.id === oldRecordValue; })){
+        el("recordTemplate").value = oldRecordValue;
+      }else if(list.length){
+        el("recordTemplate").value = list[0].id;
+      }
+
+      if(list.some(function(t){ return t.id === oldFilterValue; })){
+        el("filterTemplate").value = oldFilterValue;
+      }else{
+        el("filterTemplate").value = "";
+      }
+
+      updateTestPreview();
+      renderStandaloneTestBox();
+      renderArchiveClassSelect();
+    }
+
+    function renderRecords(){
+      const list = filteredRecords();
+      const tbody = el("recordTable");
+
+      tbody.innerHTML = "";
+      el("emptyRecords").style.display = list.length ? "none" : "block";
+
+      list.forEach(function(r){
+        const className = recordClassName(r);
+        const title = recordTitle(r);
+        const type = recordType(r);
+        const focus = [
+          r.performance ? "表現：" + r.performance : "",
+          r.errors ? "錯誤：" + r.errors : "",
+          r.nextFocus ? "下次：" + r.nextFocus : "",
+          r.note ? "備註：" + r.note : ""
+        ].filter(Boolean).join("｜");
+
+        const tr = document.createElement("tr");
+        tr.innerHTML = [
+          '<td><b>' + safe(r.date) + '</b><br><span class="muted">' + safe(r.time) + '</span></td>',
+          '<td><b>' + safe(r.student) + '</b><br><span class="muted">' + safe(r.phone) + '</span></td>',
+          '<td>' + safe(className || "—") + '<br><span class="muted">' + safe(r.teacher) + '</span></td>',
+          '<td><b>' + safe(title || "—") + '</b><br><span class="muted">' + safe(type || "") + '</span></td>',
+          '<td class="score">' + safe(r.score || "—") + '</td>',
+          '<td>' + (r.level ? '<span class="pill ' + safe(r.level) + '">' + safe(r.level) + '</span>' : '<span class="muted">—</span>') + '</td>',
+          '<td><span class="preview-line">' + safe(shortText(focus, 300)) + '</span></td>',
+          '<td><div class="row-actions"><button class="btn small ghost edit-record-btn" type="button" data-id="' + safe(r.id) + '">編輯</button><button class="btn small bad delete-record-btn" type="button" data-id="' + safe(r.id) + '">刪除</button></div></td>'
+        ].join("");
+        tbody.appendChild(tr);
+      });
+
+      renderStandaloneTestBox();
+    }
+
+    function renderStats(){
+      el("statTemplates").textContent = activeTemplates().length;
+      el("statRecords").textContent = activeRecords().length;
+      el("statAvg").textContent = state.archives.length;
+      el("statWeak").textContent = archivedRecords().length;
+    }
+
+    function classNamesForArchive(){
+      const names = new Set();
+      activeTemplates().forEach(function(t){
+        if((t.className || "").trim()) names.add(t.className.trim());
+      });
+      activeRecords().forEach(function(r){
+        const name = recordClassName(r).trim();
+        if(name) names.add(name);
+      });
+      return Array.from(names).sort(function(a,b){ return a.localeCompare(b, "zh-Hant"); });
+    }
+
+    function getActiveClassData(className){
+      const templateIds = activeTemplates()
+        .filter(function(t){ return (t.className || "").trim() === className; })
+        .map(function(t){ return t.id; });
+
+      const records = activeRecords().filter(function(r){
+        return templateIds.includes(r.templateId) || recordClassName(r).trim() === className;
+      });
+
+      records.forEach(function(r){
+        if(r.templateId && !templateIds.includes(r.templateId)){
+          const t = getTemplate(r.templateId);
+          if(t && !t.archived) templateIds.push(t.id);
+        }
+      });
+
+      const templates = activeTemplates().filter(function(t){ return templateIds.includes(t.id); });
+      return { templates: templates, records: records, templateIds: templateIds };
+    }
+
+    function renderArchiveClassSelect(){
+      const select = el("archiveClassSelect");
+      if(!select) return;
+      const names = classNamesForArchive();
+      const old = select.value;
+      select.innerHTML = names.length
+        ? names.map(function(name){ return '<option value="' + safe(name) + '">' + safe(name) + '</option>'; }).join("")
+        : '<option value="">目前沒有可歸檔的班級</option>';
+      if(names.includes(old)) select.value = old;
+      updateArchiveTargetInfo();
+    }
+
+    function updateArchiveTargetInfo(){
+      const info = el("archiveTargetInfo");
+      if(!info) return;
+      const className = el("archiveClassSelect").value;
+      if(!className){
+        info.textContent = "目前沒有可歸檔的班級。歸檔功能會將同一班級的班級測驗與學生紀錄一起移到歷史檔案。";
+        return;
+      }
+      const data = getActiveClassData(className);
+      info.textContent = "準備歸檔：「" + className + "」｜班級測驗 " + data.templates.length + " 份｜學生紀錄 " + data.records.length + " 筆。歸檔後可在下方歷史檔案中查看、匯出或整班還原。";
+    }
+
+    function archiveClass(){
+      const className = el("archiveClassSelect").value;
+      if(!className){
+        alert("目前沒有可歸檔的班級。");
+        return;
+      }
+
+      const data = getActiveClassData(className);
+      if(!data.templates.length && !data.records.length){
+        alert("這個班級目前沒有可歸檔的測驗或紀錄。");
+        return;
+      }
+
+      const message = "確定要將「" + className + "」整班歸檔嗎？\n\n會移入歷史檔案：\n班級測驗 " + data.templates.length + " 份\n學生紀錄 " + data.records.length + " 筆\n\n資料不會刪除，之後可以整班還原。";
+      if(!confirm(message)) return;
+
+      const archiveId = id("arc");
+      const archivedAt = new Date().toISOString();
+      const recordIds = data.records.map(function(r){ return r.id; });
+
+      state.templates.forEach(function(t){
+        if(data.templateIds.includes(t.id)){
+          t.archived = true;
+          t.archiveId = archiveId;
+          t.archivedAt = archivedAt;
+        }
+      });
+
+      state.records.forEach(function(r){
+        if(recordIds.includes(r.id)){
+          r.archived = true;
+          r.archiveId = archiveId;
+          r.archivedAt = archivedAt;
+        }
+      });
+
+      state.archives.unshift({
+        id: archiveId,
+        className: className,
+        archivedAt: archivedAt,
+        note: el("archiveNote").value.trim(),
+        templateIds: data.templateIds.slice(),
+        recordIds: recordIds.slice()
+      });
+
+      el("archiveNote").value = "";
+      saveState();
+      renderAll();
+      switchTab("history");
+      showStatus("已將「" + className + "」整班歸檔到歷史檔案。資料沒有刪除，可在歷史檔案中還原。");
+    }
+
+    function archiveGroupData(archiveId){
+      const archive = state.archives.find(function(a){ return a.id === archiveId; });
+      if(!archive) return { archive: null, templates: [], records: [] };
+
+      const templates = state.templates.filter(function(t){
+        return t.archiveId === archiveId || (Array.isArray(archive.templateIds) && archive.templateIds.includes(t.id));
+      });
+      const records = state.records.filter(function(r){
+        return r.archiveId === archiveId || (Array.isArray(archive.recordIds) && archive.recordIds.includes(r.id));
+      });
+      return { archive: archive, templates: templates, records: records };
+    }
+
+    function restoreArchive(archiveId){
+      const data = archiveGroupData(archiveId);
+      if(!data.archive) return;
+      if(!confirm("確定要將「" + data.archive.className + "」從歷史檔案還原到目前紀錄嗎？")) return;
+
+      const templateIds = data.templates.map(function(t){ return t.id; });
+      const recordIds = data.records.map(function(r){ return r.id; });
+
+      state.templates.forEach(function(t){
+        if(t.archiveId === archiveId || templateIds.includes(t.id)){
+          t.archived = false;
+          t.archiveId = "";
+          t.archivedAt = "";
+        }
+      });
+
+      state.records.forEach(function(r){
+        if(r.archiveId === archiveId || recordIds.includes(r.id)){
+          r.archived = false;
+          r.archiveId = "";
+          r.archivedAt = "";
+        }
+      });
+
+      state.archives = state.archives.filter(function(a){ return a.id !== archiveId; });
+      saveState();
+      renderAll();
+      switchTab("records");
+      showStatus("已還原「" + data.archive.className + "」到目前紀錄。需要列印時，可回到紀錄列表篩選該班級。");
+    }
+
+    function exportArchiveCSV(archiveId){
+      const data = archiveGroupData(archiveId);
+      if(!data.archive) return;
+
+      const headers = [
+        "歸檔班級","歸檔日期","日期","時間","學生姓名","班級","電話","老師","測驗主題","測驗類型",
+        "分數","等第","學生表現","錯誤紀錄","下次加強","備註"
+      ];
+
+      const rows = data.records.map(function(r){
+        return [
+          data.archive.className,
+          formatDateTime(data.archive.archivedAt),
+          r.date,
+          r.time,
+          r.student,
+          recordClassName(r),
+          r.phone,
+          r.teacher,
+          recordTitle(r),
+          recordType(r),
+          r.score,
+          r.level,
+          r.performance,
+          r.errors,
+          r.nextFocus,
+          r.note
+        ];
+      });
+
+      const csv = [headers].concat(rows).map(function(row){
+        return row.map(function(cell){
+          return '"' + String(cell || "").replace(/"/g, '""') + '"';
+        }).join(",");
+      }).join("\n");
+
+      const safeName = String(data.archive.className || "歷史檔案").replace(/[\\/:*?"<>|]/g, "_");
+      const blob = new Blob(["\ufeff" + csv], {type:"text/csv;charset=utf-8"});
+      downloadBlob(blob, safeName + "_歷史檔案.csv");
+    }
+
+    function renderHistory(){
+      renderArchiveClassSelect();
+      const box = el("historyList");
+      if(!state.archives.length){
+        box.innerHTML = '<div class="history-empty"><b>目前沒有歷史檔案。</b><br>上方選擇班級後按「整班歸檔」，就能把過期或很久以前的紀錄移到這裡保存。</div>';
+        return;
+      }
+
+      box.innerHTML = state.archives.map(function(a){
+        const data = archiveGroupData(a.id);
+        const rows = data.records.length
+          ? data.records.map(function(r){
+              const focus = [
+                r.performance ? "表現：" + r.performance : "",
+                r.errors ? "錯誤：" + r.errors : "",
+                r.nextFocus ? "下次：" + r.nextFocus : "",
+                r.note ? "備註：" + r.note : ""
+              ].filter(Boolean).join("｜");
+              return [
+                '<tr>',
+                '<td>' + safe(r.date || "—") + '<br><span class="muted">' + safe(r.time || "") + '</span></td>',
+                '<td><b>' + safe(r.student || "—") + '</b></td>',
+                '<td>' + safe(recordTitle(r) || "—") + '<br><span class="muted">' + safe(recordType(r) || "") + '</span></td>',
+                '<td>' + safe(r.score || "—") + '</td>',
+                '<td>' + safe(r.level || "—") + '</td>',
+                '<td><span class="preview-line">' + safe(shortText(focus, 180)) + '</span></td>',
+                '</tr>'
+              ].join("");
+            }).join("")
+          : '<tr><td colspan="6" class="muted">這個歷史檔案目前沒有學生紀錄，可能只歸檔了班級測驗模板。</td></tr>';
+
+        return [
+          '<div class="archive-card">',
+          '<div class="archive-card-head">',
+          '<div>',
+          '<div class="archive-title">' + safe(a.className || "未命名班級") + '</div>',
+          '<div class="archive-meta">歸檔時間：' + safe(formatDateTime(a.archivedAt)) + '｜班級測驗 ' + data.templates.length + ' 份｜學生紀錄 ' + data.records.length + ' 筆</div>',
+          '</div>',
+          '<div class="archive-actions">',
+          '<button class="btn small ghost export-archive-btn" type="button" data-id="' + safe(a.id) + '">匯出 CSV</button>',
+          '<button class="btn small primary restore-archive-btn" type="button" data-id="' + safe(a.id) + '">整班還原</button>',
+          '</div>',
+          '</div>',
+          '<div class="archive-card-body">',
+          a.note ? '<div class="archive-note"><b>備註：</b>' + safe(a.note) + '</div>' : '',
+          '<div class="table-wrap">',
+          '<table class="history-mini-table">',
+          '<thead><tr><th>日期</th><th>學生</th><th>測驗主題</th><th>分數</th><th>等第</th><th>紀錄摘要</th></tr></thead>',
+          '<tbody>' + rows + '</tbody>',
+          '</table>',
+          '</div>',
+          '</div>',
+          '</div>'
+        ].join("");
+      }).join("");
+    }
+
+    function renderAll(){
+      renderTemplates();
+      renderTemplateSelects();
+      renderRecords();
+      renderHistory();
+      renderStats();
+      updateSummary();
+    }
+
+    function exportJSON(){
+      const blob = new Blob([JSON.stringify(state, null, 2)], {type:"application/json;charset=utf-8"});
+      downloadBlob(blob, "英文電話測驗紀錄簿_完整備份_含歷史檔案.json");
+    }
+
+    function importJSON(event){
+      const file = event.target.files[0];
+      if(!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e){
+        try{
+          const data = normalizeState(JSON.parse(e.target.result));
+          if(!confirm("匯入後會覆蓋目前全部資料，確定嗎？")) return;
+
+          state = data;
+          editingTemplateId = "";
+          editingRecordId = "";
+          saveState();
+          renderAll();
+          clearTemplateInputs();
+          clearRecordInputs(false);
+          showStatus("匯入完成。若備份檔含歷史檔案，也會一起匯入。");
+        }catch(error){
+          alert("匯入失敗：JSON 格式不正確。");
+        }finally{
+          event.target.value = "";
+        }
+      };
+      reader.readAsText(file, "utf-8");
+    }
+
+    function exportCSV(){
+      const headers = [
+        "日期","時間","學生姓名","班級","電話","老師","測驗主題","測驗類型",
+        "分數","等第","學生表現","錯誤紀錄","下次加強","備註"
+      ];
+
+      const rows = activeRecords().map(function(r){
+        return [
+          r.date,
+          r.time,
+          r.student,
+          recordClassName(r),
+          r.phone,
+          r.teacher,
+          recordTitle(r),
+          recordType(r),
+          r.score,
+          r.level,
+          r.performance,
+          r.errors,
+          r.nextFocus,
+          r.note
+        ];
+      });
+
+      const csv = [headers].concat(rows).map(function(row){
+        return row.map(function(cell){
+          return '"' + String(cell || "").replace(/"/g, '""') + '"';
+        }).join(",");
+      }).join("\n");
+
+      const blob = new Blob(["\ufeff" + csv], {type:"text/csv;charset=utf-8"});
+      downloadBlob(blob, "英文電話測驗紀錄_目前紀錄.csv");
+    }
+
+    function downloadBlob(blob, filename){
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      URL.revokeObjectURL(link.href);
+      link.remove();
+    }
+
+    function updatePrintInfo(){
+      const list = filteredRecords();
+      const filterTemplateId = el("filterTemplate").value;
+      const selectedTemplate = getTemplate(filterTemplateId);
+
+      el("printDate").textContent = new Date().toLocaleString("zh-TW");
+      el("printTotal").textContent = list.length + " 筆";
+
+      const teachers = Array.from(new Set(list.map(function(r){ return r.teacher; }).filter(Boolean)));
+      el("printTeachers").textContent = teachers.length ? teachers.join("、") : "—";
+
+      if(selectedTemplate && !selectedTemplate.archived){
+        el("printScope").textContent = selectedTemplate.className + "｜" + selectedTemplate.title + "｜" + selectedTemplate.type;
+      }else{
+        const classes = Array.from(new Set(list.map(function(r){ return recordClassName(r); }).filter(Boolean)));
+        el("printScope").textContent = classes.length ? classes.join("、") : "全部目前紀錄";
+      }
+
+      renderStandaloneTestBox();
+    }
+
+    function printRecords(){
+      switchTab("records");
+      renderRecords();
+      updatePrintInfo();
+      setTimeout(function(){ window.print(); }, 100);
+    }
+
+    function saveCurrent(){
+      if(currentTab === "template") saveTemplate();
+      else if(currentTab === "record") saveRecord();
+      else if(currentTab === "history") showStatus("目前在歷史檔案。請使用「整班歸檔」、「整班還原」或「匯出 CSV」操作。");
+      else showStatus("目前在紀錄列表。若要新增資料，請切換到班級測驗內容或學生紀錄。");
+    }
+
+    function bindEvents(){
+      document.querySelectorAll(".tab").forEach(function(btn){
+        btn.addEventListener("click", function(){ switchTab(btn.dataset.tab); });
+      });
+
+      el("prevBtn").addEventListener("click", prevTab);
+      el("nextBtn").addEventListener("click", nextTab);
+      el("saveBtn").addEventListener("click", saveCurrent);
+      el("clearBtn").addEventListener("click", clearCurrentInputs);
+      el("deleteAllBtn").addEventListener("click", deleteAll);
+
+      el("newTemplateBtn").addEventListener("click", clearTemplateInputs);
+      el("goTemplateBtn").addEventListener("click", function(){ switchTab("template"); });
+      el("sideRecordsBtn").addEventListener("click", function(){ switchTab("records"); });
+
+      el("printBtn").addEventListener("click", printRecords);
+      el("exportCsvBtn").addEventListener("click", exportCSV);
+      el("exportJsonBtn").addEventListener("click", exportJSON);
+      el("importFile").addEventListener("change", importJSON);
+
+      el("recordTemplate").addEventListener("change", updateTestPreview);
+      el("search").addEventListener("input", renderRecords);
+      el("filterTemplate").addEventListener("change", renderRecords);
+      el("filterLevel").addEventListener("change", renderRecords);
+      el("sortBy").addEventListener("change", renderRecords);
+      el("resetFilterBtn").addEventListener("click", resetFilters);
+
+      el("archiveClassSelect").addEventListener("change", updateArchiveTargetInfo);
+      el("archiveClassBtn").addEventListener("click", archiveClass);
+      el("refreshArchiveBtn").addEventListener("click", function(){ renderHistory(); showStatus("已更新可歸檔班級與歷史檔案清單。"); });
+
+      document.addEventListener("click", function(event){
+        const target = event.target;
+
+        if(target.classList.contains("use-template-btn")){
+          useTemplate(target.dataset.id);
+        }
+        if(target.classList.contains("edit-template-btn")){
+          editTemplate(target.dataset.id);
+        }
+        if(target.classList.contains("delete-template-btn")){
+          deleteTemplate(target.dataset.id);
+        }
+        if(target.classList.contains("edit-record-btn")){
+          editRecord(target.dataset.id);
+        }
+        if(target.classList.contains("delete-record-btn")){
+          deleteRecord(target.dataset.id);
+        }
+        if(target.classList.contains("quick-btn")){
+          addQuickText(target.dataset.target, target.dataset.text);
+        }
+        if(target.classList.contains("restore-archive-btn")){
+          restoreArchive(target.dataset.id);
+        }
+        if(target.classList.contains("export-archive-btn")){
+          exportArchiveCSV(target.dataset.id);
+        }
+      });
+    }
+
+    function init(){
+      state = normalizeState(state);
+      saveState();
+      el("recordDate").value = today();
+      el("recordTime").value = nowTime();
+      bindEvents();
+      renderAll();
+      switchTab("template");
+    }
+
+    init();
+  </script>
+</body>
+</html>
