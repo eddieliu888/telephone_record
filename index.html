@@ -977,7 +977,234 @@
         margin:10mm;
       }
     }
-  </style>
+
+
+    /* ================================================================
+       全畫面易讀版：不改動原版的資料結構、紀錄/歸檔/列印功能。
+       右側「目前狀態」保留隱藏 DOM，避免原有 JS 讀取統計時出錯。
+       快速評語一律完整展示，不以固定高度裁切或加入內部捲軸。
+       ================================================================ */
+    @media screen {
+      main{grid-template-columns:minmax(0,1fr)}
+      .side-card{display:none!important}
+      .main-card{grid-template-rows:56px minmax(0,1fr) 58px}
+      .panel{padding:12px}
+      .tab{font-size:16px;padding:8px 17px}
+      .mode-label{font-size:14px;max-width:320px}
+      label{font-size:14px}
+      .btn.small{font-size:13px}
+      .template-panel{grid-template-columns:minmax(0,1fr) minmax(300px,28%)}
+      #templateContent{font-size:19px}
+      .list-body,.box-body{scrollbar-width:thin}
+      .test-preview{font-size:19px;line-height:1.75}
+      .records-table td{font-size:14px}
+      .records-table th{font-size:13px}
+      .standalone-test-content{font-size:16px}
+
+      /* 學生紀錄：預覽與快速評語並排，四大文字紀錄框橫排加高。 */
+      .record-panel{grid-template-rows:auto minmax(0,1fr);gap:10px}
+      .record-top{grid-template-columns:minmax(240px,2fr) repeat(3,minmax(0,1fr));gap:12px}
+      .record-top input,.record-top select{font-size:16px}
+      .record-work{
+        min-height:0;
+        display:grid;
+        grid-template-columns:minmax(300px,.5fr) minmax(0,1fr);
+        grid-template-rows:auto auto minmax(0,1fr);
+        grid-template-areas:
+          "preview scores"
+          "preview quick"
+          "notes notes";
+        gap:10px;
+      }
+      .record-work > .box{
+        grid-area:preview;
+        min-height:0;
+        grid-template-rows:44px minmax(0,1fr);
+      }
+      /* 只改排版層：表單欄位仍保留在原 DOM 與原儲存程序中。 */
+      .student-form{display:contents}
+      .student-grid{
+        grid-area:scores;
+        grid-template-columns:repeat(4,minmax(0,1fr));
+        gap:8px;
+        min-width:0;
+      }
+      .student-grid > div{min-width:0}
+      .student-grid label{font-size:14px;margin-bottom:4px}
+      .student-grid input,.student-grid select{
+        min-width:0;font-size:16px;padding:9px 10px;
+      }
+
+      /* 全部快速評語依五組展開，支援完整顯示與點選。 */
+      .quick-panel{
+        grid-area:quick;
+        display:grid;
+        grid-template-rows:repeat(5,auto);
+        align-content:center;
+        gap:3px;
+        padding:8px 10px;
+        min-height:0;
+        max-height:none;
+        overflow:visible;
+        background:#f8fbff;
+      }
+      .quick-group{
+        display:flex;
+        flex-wrap:nowrap;
+        gap:6px;
+        align-items:center;
+        min-height:34px;
+        min-width:0;
+        margin:0;
+      }
+      .quick-title{
+        flex:none;min-width:68px;
+        font-size:15px;
+        font-weight:900;
+      }
+      .quick-btn{
+        flex:0 1 auto;
+        min-width:0;
+        font-size:14px;
+        padding:7px 9px;
+        border-radius:10px;
+        border:1px solid #cddff3;
+        white-space:nowrap;
+        transition:background-color .15s,color .15s,border-color .15s,transform .15s;
+      }
+      .quick-btn.selected{
+        color:#fff!important;
+        background:#2357a6!important;
+        border-color:#173f7d!important;
+        box-shadow:0 2px 7px rgba(35,87,166,.19);
+      }
+      .quick-btn.selected::before{content:"✓";font-weight:900;margin-right:4px}
+      .quick-btn:focus-visible{outline:3px solid #7ba7e8;outline-offset:2px}
+
+      .notes-grid{
+        grid-area:notes;
+        grid-template-columns:repeat(4,minmax(0,1fr));
+        grid-template-rows:minmax(0,1fr);
+        gap:10px;
+      }
+      .note-box{min-width:0;min-height:0}
+      .note-box label{font-size:16px;margin-bottom:6px;color:#43546e}
+      .note-box textarea{
+        width:100%;height:100%;min-height:0;
+        font-size:17px;line-height:1.7;
+        padding:12px;
+        border-radius:13px;
+      }
+    }
+
+    @media screen and (max-width:1280px) and (min-width:901px){
+      .record-work{grid-template-columns:minmax(270px,.45fr) minmax(0,1fr)}
+      .quick-panel{padding:6px 8px;gap:2px}
+      .quick-group{gap:4px;min-height:32px}
+      .quick-title{min-width:62px;font-size:14px}
+      .quick-btn{font-size:13px;padding:6px 7px}
+      .notes-grid{gap:8px}
+      .note-box textarea{font-size:16px;padding:9px}
+    }
+
+    @media screen and (max-width:1050px) and (min-width:901px){
+      .record-work{grid-template-columns:minmax(250px,.40fr) minmax(0,1fr)}
+      .quick-panel{padding:6px;gap:2px}
+      .quick-group{gap:3px}
+      .quick-title{min-width:55px;font-size:13px}
+      .quick-btn{font-size:12px;padding:6px 5px}
+      .student-grid{gap:5px}
+      .student-grid input,.student-grid select{font-size:14px;padding:8px 6px}
+      .note-box textarea{font-size:15px}
+    }
+
+    @media screen and (max-width:900px){
+      .app{grid-template-rows:auto auto}
+      .main-card{min-height:1100px}
+      .tab{font-size:13px;padding:7px 9px}
+      .panel.active{overflow:auto}
+      .template-panel{grid-template-columns:1fr;grid-template-rows:minmax(400px,1fr) 260px}
+      .record-top{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .record-work{
+        grid-template-columns:minmax(0,1fr);
+        grid-template-rows:minmax(140px,auto) auto auto minmax(340px,1fr);
+        grid-template-areas:"preview" "scores" "quick" "notes";
+      }
+      .student-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .quick-panel{align-content:start}
+      .quick-group{flex-wrap:wrap;min-height:36px}
+      .quick-title{min-width:62px}
+      .quick-btn{font-size:13px;padding:6px 8px}
+      .notes-grid{grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:repeat(2,minmax(145px,1fr))}
+      .note-box textarea{min-height:110px}
+    }
+  
+
+    /* 2026-11-06 更新：長句式評語不截字；在筆電寬度下全部展開、免捲動。 */
+    @media screen {
+      .quick-group{
+        position:relative;
+        display:flex;
+        flex-wrap:wrap;
+        align-content:center;
+        align-items:center;
+        padding:2px 0 2px 78px;
+        gap:5px 6px;
+        min-height:31px;
+      }
+      .quick-title{
+        position:absolute;
+        left:0;
+        top:50%;
+        transform:translateY(-50%);
+        width:70px;
+        min-width:0;
+        font-size:15px;
+        line-height:1.3;
+      }
+      .quick-btn{
+        flex:0 0 auto;
+        min-width:0;
+        max-width:100%;
+        white-space:normal;
+        overflow-wrap:anywhere;
+        line-height:1.3;
+        text-align:center;
+      }
+      .quick-panel{
+        align-content:center;
+        max-height:none;
+        overflow:visible;
+        grid-template-rows:repeat(5,auto);
+        row-gap:3px;
+      }
+    }
+    @media screen and (min-width:901px){
+      .record-work{
+        grid-template-columns:minmax(280px,.78fr) minmax(0,1.22fr);
+        grid-template-rows:minmax(75px,.5fr) auto minmax(96px,1fr);
+        grid-template-areas:
+          "preview scores"
+          "quick quick"
+          "notes notes";
+      }
+      .quick-panel{padding:7px 10px}
+      .note-box textarea{line-height:1.55}
+    }
+    @media screen and (max-width:1100px) and (min-width:901px){
+      .quick-btn{font-size:12.5px;padding:5px 7px}
+      .quick-group{gap:3px 5px;padding-left:69px;min-height:27px}
+      .quick-title{width:63px;font-size:13px}
+      .quick-panel{padding:4px 8px;row-gap:1px}
+      .record-work{grid-template-rows:minmax(65px,.5fr) auto minmax(92px,1fr);gap:7px}
+      .note-box textarea{font-size:15px}
+    }
+    @media screen and (max-width:900px){
+      .quick-panel{align-content:start;gap:5px}
+      .quick-group{padding-left:75px}
+      .quick-btn{font-size:13px;padding:6px 7px}
+    }
+</style>
 </head>
 <body>
   <div class="app">
@@ -1140,12 +1367,19 @@
                   <button class="btn small ghost quick-btn" data-target="errors" data-text="文法使用仍不穩定。" type="button">文法不穩</button>
                 </div>
                 <div class="quick-group">
+
                   <span class="quick-title">發音</span>
-                  <button class="btn small ghost quick-btn" data-target="nextFocus" data-text="下次加強母音發音。" type="button">母音</button>
-                  <button class="btn small ghost quick-btn" data-target="nextFocus" data-text="下次加強子音結尾發音。" type="button">字尾音</button>
-                  <button class="btn small ghost quick-btn" data-target="nextFocus" data-text="下次加強 th / s / z 的發音辨識。" type="button">th/s/z</button>
-                  <button class="btn small ghost quick-btn" data-target="nextFocus" data-text="下次加強自然發音拼讀。" type="button">自然發音</button>
-                  <button class="btn small ghost quick-btn" data-target="nextFocus" data-text="下次加強重音與語調。" type="button">重音語調</button>
+
+                  <button class="btn small ghost quick-btn" data-target="errors" data-text="自然發音技巧不熟。" type="button">自然發音技巧不熟</button>
+
+                  <button class="btn small ghost quick-btn" data-target="nextFocus" data-text="需多利用點讀筆進行跟讀。" type="button">需多利用點讀筆進行跟讀</button>
+
+                  <button class="btn small ghost quick-btn" data-target="performance" data-text="發音漂亮。" type="button">發音漂亮</button>
+
+                  <button class="btn small ghost quick-btn" data-target="performance" data-text="發音正確，偶有些單字發音有誤。" type="button">發音正確，偶有些單字發音有誤。</button>
+
+                  <button class="btn small ghost quick-btn" data-target="errors" data-text="聲音過小。" type="button">聲音過小</button>
+
                 </div>
                 <div class="quick-group">
                   <span class="quick-title">下次</span>
@@ -1156,11 +1390,23 @@
                   <button class="btn small ghost quick-btn" data-target="nextFocus" data-text="下次加強自信開口。" type="button">開口自信</button>
                 </div>
                 <div class="quick-group">
+
                   <span class="quick-title">家長</span>
-                  <button class="btn small ghost quick-btn" data-target="note" data-text="建議每天聽讀 5 分鐘。" type="button">聽讀5分</button>
-                  <button class="btn small ghost quick-btn" data-target="note" data-text="建議在家複習本次單字。" type="button">複習單字</button>
-                  <button class="btn small ghost quick-btn" data-target="note" data-text="建議練習用完整句回答。" type="button">完整句練習</button>
-                  <button class="btn small ghost quick-btn" data-target="note" data-text="已提醒下次電話測驗範圍。" type="button">提醒範圍</button>
+
+                  <button class="btn small ghost quick-btn" data-target="note" data-text="上課容易與旁邊的同學聊天。" type="button">上課容易與旁邊的同學聊天</button>
+
+                  <button class="btn small ghost quick-btn" data-target="note" data-text="作業常未按時繳交。" type="button">作業常未按時繳交</button>
+
+                  <button class="btn small ghost quick-btn" data-target="note" data-text="上課活潑。" type="button">上課活潑</button>
+
+                  <button class="btn small ghost quick-btn" data-target="note" data-text="上課參與度高。" type="button">上課參與度高</button>
+
+                  <button class="btn small ghost quick-btn" data-target="note" data-text="回家需再多複習。" type="button">回家需再多複習</button>
+
+                  <button class="btn small ghost quick-btn" data-target="note" data-text="回家需練習聽讀至少約20分鐘。" type="button">回家需練習聽讀至少約20分鐘</button>
+
+                  <button class="btn small ghost quick-btn" data-target="note" data-text="上課不愛參與活動。" type="button">上課不愛參與活動</button>
+
                 </div>
               </div>
 
@@ -1567,6 +1813,7 @@
       el("errors").value = "";
       el("nextFocus").value = "";
       el("note").value = "";
+      syncQuickButtons();
       if(!keepTemplate && activeTemplates().length){
         el("recordTemplate").value = activeTemplates()[0].id;
       }
@@ -1749,6 +1996,7 @@
       el("errors").value = r.errors || "";
       el("nextFocus").value = r.nextFocus || "";
       el("note").value = r.note || "";
+      syncQuickButtons();
 
       updateTestPreview(r);
       updateSummary();
@@ -1778,11 +2026,32 @@
       switchTab("template");
     }
 
+    /* 快速評語仍寫入原本四個欄位；再次點選即取消，選中狀態清楚顯示。 */
+    function syncQuickButtons(){
+      document.querySelectorAll(".quick-btn").forEach(function(btn){
+        const target = el(btn.dataset.target);
+        const text = btn.dataset.text.trim();
+        const selected = target.value.split(/\r?\n/).some(function(line){
+          return line.trim() === text;
+        });
+        btn.classList.toggle("selected", selected);
+        btn.setAttribute("aria-pressed", String(selected));
+        btn.title = (selected ? "按一下取消：" : "按一下勾選：") + text;
+      });
+    }
+
     function addQuickText(targetId, text){
       const target = el(targetId);
-      const old = target.value.trim();
-      target.value = old ? old + "\n" + text : text;
-      target.focus();
+      const lines = target.value.split(/\r?\n/);
+      const existingIndex = lines.findIndex(function(line){ return line.trim() === text.trim(); });
+      if(existingIndex >= 0){
+        lines.splice(existingIndex, 1);
+        target.value = lines.join("\n").replace(/^\n+|\n+$/g, "");
+      }else{
+        const old = target.value.trim();
+        target.value = old ? old + "\n" + text : text;
+      }
+      syncQuickButtons();
     }
 
     function updateTestPreview(recordForSnapshot){
@@ -2383,6 +2652,11 @@
       el("archiveClassSelect").addEventListener("change", updateArchiveTargetInfo);
       el("archiveClassBtn").addEventListener("click", archiveClass);
       el("refreshArchiveBtn").addEventListener("click", function(){ renderHistory(); showStatus("已更新可歸檔班級與歷史檔案清單。"); });
+
+      ["performance", "errors", "nextFocus", "note"].forEach(function(fieldId){
+        el(fieldId).addEventListener("input", syncQuickButtons);
+      });
+      syncQuickButtons();
 
       document.addEventListener("click", function(event){
         const target = event.target;
