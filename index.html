@@ -1204,6 +1204,129 @@
       .quick-group{padding-left:75px}
       .quick-btn{font-size:13px;padding:6px 7px}
     }
+
+
+    /* 班級題庫圖片／截圖：在原版樣式之上局部擴充，不影響學生紀錄版面。 */
+    .template-content{grid-template-rows:auto auto minmax(0,1fr);gap:7px}
+    .image-toolbar{display:flex;align-items:center;flex-wrap:wrap;gap:7px;padding:5px 0}
+    .image-toolbar .btn{font-size:14px;padding:8px 10px}
+    .image-count{font-size:13px;font-weight:800;color:var(--primary-dark);white-space:nowrap}
+    .image-hint{font-size:12px;color:var(--muted);line-height:1.4}
+    #templateContent.rich-template-editor{
+      min-height:0;height:100%;overflow-y:auto;overflow-x:hidden;
+      white-space:pre-wrap;word-break:break-word;
+      border:1px solid var(--line);border-radius:12px;outline:none;
+      cursor:text;user-select:text;scrollbar-width:thin;
+      background:linear-gradient(180deg,#fff,#fbfdff);
+      font-size:19px;line-height:1.65;padding:14px;
+    }
+    #templateContent.rich-template-editor:focus{border-color:#7ba7e8;box-shadow:0 0 0 3px rgba(35,87,166,.12)}
+    #templateContent.rich-template-editor:empty::before{
+      content:attr(data-placeholder);display:block;white-space:normal;
+      color:#94a3b8;pointer-events:none
+    }
+    #templateContent.rich-template-editor.drag-over{background:#eef6ff;border:2px dashed var(--primary)}
+    #templateContent img,.test-preview img,.standalone-test-content img{
+      display:block;max-width:100%;width:auto;height:auto;max-height:470px;
+      object-fit:contain;border:1px solid #d5e1ec;border-radius:10px;
+      margin:10px 0;box-shadow:0 2px 7px rgba(20,40,70,.09)
+    }
+    #templateContent img{cursor:pointer}
+    #templateContent img.selected-image{outline:4px solid #2357a6;outline-offset:2px}
+    #testPreview,#standaloneTestContent{overflow-wrap:anywhere;white-space:pre-wrap}
+    .test-preview img,.standalone-test-content img{max-height:420px}
+    @media screen and (max-width:900px){
+      #templateContent.rich-template-editor{min-height:240px}
+      .image-toolbar .btn{font-size:12px}
+      .image-hint{flex-basis:100%}
+    }
+    @media print{
+      .image-toolbar{display:none!important}
+      .standalone-test-box{page-break-inside:auto;break-inside:auto}
+      .standalone-test-content{max-height:none!important;overflow:visible!important}
+      .standalone-test-content img{max-width:100%;max-height:135mm;page-break-inside:avoid;break-inside:avoid;box-shadow:none;border:1px solid #aaa}
+    }
+
+
+    /* 2026-11-06 修正：學生紀錄的測驗預覽不再只有一行高。
+       左側題目佔據整個表單工作高度，右側保留全部評語及四個輸入框。
+       超出時題目區自動等比例縮放，無內部捲動條。 */
+    @media screen and (min-width:901px){
+      .record-panel .record-work{
+        grid-template-columns:minmax(290px, 0.37fr) minmax(0, 0.63fr);
+        grid-template-rows:auto minmax(0,1fr) minmax(119px,0.55fr);
+        grid-template-areas:
+          "preview scores"
+          "preview quick"
+          "preview notes";
+        gap:8px;
+      }
+      .record-panel .record-work > .box{
+        grid-area:preview;
+        grid-template-rows:48px minmax(0,1fr);
+      }
+      .record-panel .student-grid{grid-area:scores}
+      .record-panel .quick-panel{
+        grid-area:quick;
+        max-height:none;
+        overflow:hidden;
+        gap:1px;
+        padding:5px 7px;
+        align-content:center;
+      }
+      .record-panel .quick-group{min-height:28px;gap:3px 5px;padding:2px 0 2px 64px}
+      .record-panel .quick-title{font-size:14px;width:59px}
+      .record-panel .quick-btn{font-size:13px;padding:5px 7px;line-height:1.22}
+      .record-panel .notes-grid{grid-area:notes;min-height:0}
+      .record-panel .note-box textarea{font-size:15px;padding:8px;line-height:1.4}
+    }
+    @media screen and (min-width:901px) and (max-width:1190px){
+      .record-panel .record-work{grid-template-columns:minmax(270px,0.34fr) minmax(0,0.66fr);gap:6px}
+      .record-panel .student-grid{gap:5px}
+      .record-panel .student-grid input,.record-panel .student-grid select{font-size:14px;padding:7px 6px}
+      .record-panel .quick-panel{padding:3px 5px;gap:0}
+      .record-panel .quick-group{min-height:25px;gap:2px 4px;padding-left:58px}
+      .record-panel .quick-title{width:54px;font-size:12px}
+      .record-panel .quick-btn{font-size:11.5px;padding:4px 5px;line-height:1.18}
+      .record-panel .notes-grid{gap:6px}
+      .record-panel .note-box label{font-size:13px}
+      .record-panel .note-box textarea{font-size:13px;padding:6px}
+    }
+    .record-panel .record-work > .box .box-head{gap:6px}
+    .preview-head-actions{display:flex;align-items:center;gap:5px;flex-wrap:nowrap}
+    .preview-head-actions .btn{font-size:13px;padding:6px 8px}
+    #previewBody{min-height:0;overflow:hidden!important;padding:10px}
+    #testPreview{display:block;transform-origin:top left;overflow:visible!important;max-height:none!important}
+    #testPreview img{max-width:100%;max-height:440px;object-fit:contain}
+    @media screen and (max-width:900px){
+      .record-panel .record-work > .box{min-height:270px}
+      #previewBody{min-height:210px}
+      .preview-head-actions .btn{font-size:12px;padding:5px 7px}
+    }
+    .test-preview-overlay[hidden]{display:none!important}
+    .test-preview-overlay{
+      position:fixed;inset:0;z-index:9999;
+      display:flex;align-items:center;justify-content:center;
+      padding:14px;background:rgba(8,21,40,.78);
+      backdrop-filter:blur(6px);
+    }
+    .full-preview-window{
+      width:min(1500px,100%);height:100%;max-height:100%;
+      background:#fff;border:2px solid #a7bdd8;border-radius:15px;
+      box-shadow:0 18px 60px rgba(0,0,0,.32);
+      display:grid;grid-template-rows:56px minmax(0,1fr) 34px;overflow:hidden;
+    }
+    .full-preview-head{
+      padding:9px 16px;display:flex;align-items:center;justify-content:space-between;
+      gap:12px;background:#eef5ff;border-bottom:1px solid var(--line);
+      color:var(--primary-dark);font-size:20px;
+    }
+    .full-preview-body{min-height:0;overflow:hidden;padding:18px 24px}
+    #fullPreviewContent{transform-origin:top left;max-height:none!important;overflow:visible!important;font-size:23px;line-height:1.55}
+    #fullPreviewContent img{max-width:100%;max-height:680px;object-fit:contain}
+    .full-preview-foot{border-top:1px solid var(--line);display:grid;place-items:center;font-size:13px;color:var(--muted)}
+    @media print{.test-preview-overlay{display:none!important}}
+
 </style>
 </head>
 <body>
@@ -1264,20 +1387,17 @@
             </div>
 
             <div class="template-content">
-              <label>測驗內容：單字與句子題庫</label>
-              <textarea id="templateContent" placeholder="同一班的測驗內容只要輸入一次，例如：
-
-單字：
-1. rice
-2. noodles
-3. soup
-4. chicken
-
-句子：
-1. What do you want for lunch?
-2. I want some rice, please.
-3. Do you want some soup?
-4. Yes, please. / No, thank you."></textarea>
+              <label id="templateContentLabel">測驗內容：文字、圖案、照片與截圖</label>
+              <div class="image-toolbar no-print">
+                <button type="button" class="btn primary" id="addTemplateImageBtn">🖼️ 加入圖片／相片</button>
+                <input type="file" id="templateImageFile" accept="image/png,image/jpeg,image/webp,image/gif,image/bmp" multiple>
+                <button type="button" class="btn ghost" id="removeTemplateImageBtn" disabled>刪除選取圖片</button>
+                <span class="image-count" id="templateImageCount">圖片：0 張</span>
+                <span class="image-hint">先點選插入位置，再上傳圖片；或直接按 Ctrl+V 貼上截圖。點圖片可選取、刪除。</span>
+              </div>
+              <div id="templateContent" class="rich-template-editor" role="textbox" aria-multiline="true"
+                   aria-labelledby="templateContentLabel" contenteditable="true"
+                   data-placeholder="在這裡輸入單字、英文句子，或點選上方按鈕加入照片。也能直接貼上截圖（Ctrl+V）。"></div>
             </div>
           </div>
 
@@ -1314,9 +1434,12 @@
             <div class="box">
               <div class="box-head">
                 <span>本班測驗題目預覽</span>
-                <button class="btn small ghost" id="goTemplateBtn" type="button">編輯題目</button>
+                <div class="preview-head-actions">
+                  <button class="btn small ghost" id="expandTestPreviewBtn" type="button" title="無捲動全畫面檢視所有題目及圖片">⛶ 放大題目</button>
+                  <button class="btn small ghost" id="goTemplateBtn" type="button">編輯題目</button>
+                </div>
               </div>
-              <div class="box-body">
+              <div class="box-body" id="previewBody">
                 <div id="testPreview" class="test-preview muted">請先選擇或建立班級測驗內容。</div>
               </div>
             </div>
@@ -1598,6 +1721,19 @@
     </main>
   </div>
 
+  <!-- 僅供學生紀錄頁使用的無捲動大型題目檢視；不改動資料格式。 -->
+  <section id="testPreviewOverlay" class="test-preview-overlay" role="dialog" aria-modal="true" aria-label="班級測驗全部題目" hidden>
+    <div class="full-preview-window">
+      <div class="full-preview-head">
+        <strong>本班測驗題目｜全畫面預覽</strong>
+        <button class="btn primary" id="closeTestPreviewBtn" type="button">✕ 關閉並返回紀錄</button>
+      </div>
+      <div class="full-preview-body" id="fullPreviewBody">
+        <div id="fullPreviewContent" class="test-preview"></div>
+      </div>
+      <div class="full-preview-foot">題目與圖片會自動縮放，以便一次完整顯示；按 Esc 可返回學生紀錄。</div>
+    </div>
+  </section>
   <script>
     "use strict";
 
@@ -1606,6 +1742,9 @@
     let currentTab = "template";
     let editingTemplateId = "";
     let editingRecordId = "";
+    let selectedTemplateImage = null;
+    let editorSavedRange = null;
+    let imageInsertBusy = false;
 
     let state = loadState();
 
@@ -1654,7 +1793,13 @@
     }
 
     function saveState(){
-      localStorage.setItem(STORE_KEY, JSON.stringify(state));
+      try{
+        localStorage.setItem(STORE_KEY, JSON.stringify(state));
+        return true;
+      }catch(error){
+        alert("資料尚未儲存成功。圖片或截圖可能已超過瀏覽器的本機儲存空間。\n請先使用『備份 JSON』保存現有資料，並嘗試減少圖片數量或尺寸。\n錯誤：" + error.message);
+        return false;
+      }
     }
 
     function id(prefix){
@@ -1687,6 +1832,189 @@
       return String(text || "").replace(/[&<>"']/g, function(ch){
         return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"}[ch];
       });
+    }
+
+    /* 測驗內容既保留舊版純文字 content，也另存安全的圖片版 contentHtml。
+       只允許白名單文字標籤以及 data:image/* 的點陣圖，避免匯入 JSON 執行外部 HTML。 */
+    function sanitizeRichHtml(html){
+      if(!html) return "";
+      const tpl = document.createElement("template");
+      tpl.innerHTML = String(html);
+      const allowed = new Set(["DIV","P","BR","B","STRONG","I","EM","U","SPAN","UL","OL","LI"]);
+      const blocked = new Set(["SCRIPT","STYLE","IFRAME","OBJECT","EMBED","SVG","FORM","META","LINK","VIDEO","AUDIO"]);
+      function clean(node){
+        if(node.nodeType === Node.TEXT_NODE) return safe(node.textContent);
+        if(node.nodeType !== Node.ELEMENT_NODE) return "";
+        const tag = node.tagName.toUpperCase();
+        if(blocked.has(tag)) return "";
+        if(tag === "IMG"){
+          const src = node.getAttribute("src") || "";
+          if(!/^data:image\/(?:png|jpeg|webp|gif);base64,[a-z0-9+/=]+$/i.test(src)) return "";
+          return '<img src="' + src + '" alt="測驗圖片" loading="lazy">';
+        }
+        if(tag === "BR") return "<br>";
+        const children = Array.from(node.childNodes).map(clean).join("");
+        if(!allowed.has(tag)) return children;
+        const name = tag.toLowerCase();
+        return "<" + name + ">" + children + "</" + name + ">";
+      }
+      return Array.from(tpl.content.childNodes).map(clean).join("");
+    }
+
+    function renderRichContent(container, content, contentHtml, fallback){
+      const html = sanitizeRichHtml(contentHtml || "");
+      if(html){
+        container.innerHTML = html;
+      }else{
+        container.textContent = content || fallback || "—";
+      }
+    }
+
+    function imageCountFrom(html){
+      return (String(html || "").match(/<img\s/gi) || []).length;
+    }
+
+    function updateTemplateImageControls(){
+      const editor = el("templateContent");
+      const imgs = editor.querySelectorAll("img");
+      if(selectedTemplateImage && !editor.contains(selectedTemplateImage)) selectedTemplateImage = null;
+      el("templateImageCount").textContent = "圖片：" + imgs.length + " 張";
+      el("removeTemplateImageBtn").disabled = !selectedTemplateImage;
+    }
+
+    function setTemplateEditor(plain, rich){
+      const editor = el("templateContent");
+      selectedTemplateImage = null;
+      editorSavedRange = null;
+      if(rich && sanitizeRichHtml(rich)) editor.innerHTML = sanitizeRichHtml(rich);
+      else editor.textContent = plain || "";
+      updateTemplateImageControls();
+    }
+
+    function getEditorPlainText(){
+      return el("templateContent").innerText.trim();
+    }
+
+    function getEditorRichHtml(){
+      return sanitizeRichHtml(el("templateContent").innerHTML);
+    }
+
+    function rememberEditorCaret(){
+      const editor = el("templateContent");
+      const selection = window.getSelection();
+      if(!selection || !selection.rangeCount || !editor.contains(selection.anchorNode)) return;
+      editorSavedRange = selection.getRangeAt(0).cloneRange();
+    }
+
+    function placeImageInEditor(dataUrl){
+      const editor = el("templateContent");
+      const img = document.createElement("img");
+      img.src = dataUrl;
+      img.alt = "測驗圖片";
+      img.setAttribute("contenteditable", "false");
+      let range = editorSavedRange;
+      const selection = window.getSelection();
+      if(range && editor.contains(range.commonAncestorContainer)){
+        range = range.cloneRange();
+        range.deleteContents();
+        range.insertNode(img);
+        range.setStartAfter(img);
+      }else{
+        range = document.createRange();
+        range.selectNodeContents(editor);
+        range.collapse(false);
+        range.insertNode(img);
+        range.setStartAfter(img);
+      }
+      const br = document.createElement("br");
+      range.insertNode(br);
+      range.setStartAfter(br);
+      range.collapse(true);
+      selection.removeAllRanges();
+      selection.addRange(range);
+      editorSavedRange = range.cloneRange();
+      editor.focus();
+      editor.scrollTop = editor.scrollHeight;
+      updateTemplateImageControls();
+    }
+
+    function fileAsDataUrl(file){
+      return new Promise(function(resolve,reject){
+        const reader = new FileReader();
+        reader.onload = function(){resolve(String(reader.result));};
+        reader.onerror = function(){reject(reader.error || new Error("讀取圖片失敗"));};
+        reader.readAsDataURL(file);
+      });
+    }
+
+    /* 縮圖以減少 localStorage 的體積，保留清楚的文字與照片。 */
+    function optimizeImageFile(file){
+      return new Promise(function(resolve,reject){
+        if(!file || !file.type.startsWith("image/")) return reject(new Error("不是圖片檔案"));
+        if(file.type === "image/svg+xml") return reject(new Error("不支援 SVG，請改用 PNG/JPG 圖檔"));
+        const blobUrl = URL.createObjectURL(file);
+        const img = new Image();
+        img.onload = async function(){
+          URL.revokeObjectURL(blobUrl);
+          try{
+            const nativeW = img.naturalWidth, nativeH = img.naturalHeight;
+            if(!nativeW || !nativeH) throw new Error("圖片尺寸不正確");
+            const scale = Math.min(1,1600 / Math.max(nativeW,nativeH));
+            const canvas = document.createElement("canvas");
+            canvas.width = Math.max(1,Math.round(nativeW*scale));
+            canvas.height = Math.max(1,Math.round(nativeH*scale));
+            canvas.getContext("2d", {alpha:false}).drawImage(img,0,0,canvas.width,canvas.height);
+            let data = canvas.toDataURL("image/webp",0.9);
+            if(!data.startsWith("data:image/webp")) data=canvas.toDataURL("image/jpeg",0.88);
+            // For a sharply rendered screenshot, prefer PNG if it stays reasonably small.
+            if(file.type === "image/png"){
+              const png=canvas.toDataURL("image/png");
+              if(png.length <= 450000 || png.length < data.length*1.08) data=png;
+            }
+            if(data.length > 550000){
+              const second=document.createElement("canvas");
+              const ratio=Math.min(1,1200/Math.max(canvas.width,canvas.height));
+              second.width=Math.max(1,Math.round(canvas.width*ratio));
+              second.height=Math.max(1,Math.round(canvas.height*ratio));
+              second.getContext("2d",{alpha:false}).drawImage(canvas,0,0,second.width,second.height);
+              data=second.toDataURL("image/webp",0.79);
+              if(!data.startsWith("data:image/webp")) data=second.toDataURL("image/jpeg",0.82);
+            }
+            resolve(data);
+          }catch(error){reject(error);}
+        };
+        img.onerror = function(){URL.revokeObjectURL(blobUrl);reject(new Error("無法讀取圖片，請使用 PNG、JPG 或 WebP"));};
+        img.src = blobUrl;
+      });
+    }
+
+    async function insertImageFiles(files){
+      const imageFiles = Array.from(files || []).filter(function(f){return f && f.type && f.type.startsWith("image/");});
+      if(!imageFiles.length || imageInsertBusy) return;
+      imageInsertBusy = true;
+      el("addTemplateImageBtn").disabled = true;
+      try{
+        for(const file of imageFiles){
+          const dataUrl = await optimizeImageFile(file);
+          placeImageInEditor(dataUrl);
+        }
+        showStatus("已加入 " + imageFiles.length + " 張圖片；請按下方『儲存班級測驗』保存。建議定期備份 JSON。");
+      }catch(error){
+        alert("加入圖片失敗：" + error.message);
+      }finally{
+        imageInsertBusy = false;
+        el("addTemplateImageBtn").disabled = false;
+        updateTemplateImageControls();
+      }
+    }
+
+    function removeSelectedImage(){
+      if(!selectedTemplateImage) return;
+      selectedTemplateImage.remove();
+      selectedTemplateImage=null;
+      updateTemplateImageControls();
+      el("templateContent").focus();
+      showStatus("已移除所選圖片；記得按『儲存班級測驗』才會寫入更動。");
     }
 
     function shortText(text, max){
@@ -1793,7 +2121,7 @@
       el("tplClass").value = "";
       el("tplTitle").value = "";
       el("tplType").value = "電話口說";
-      el("templateContent").value = "";
+      setTemplateEditor("", "");
       showStatus("已清空班級測驗輸入區。");
       renderTemplates();
       updateSummary();
@@ -1840,10 +2168,12 @@
       const className = el("tplClass").value.trim();
       const title = el("tplTitle").value.trim();
       const type = el("tplType").value;
-      const content = el("templateContent").value.trim();
+      const content = getEditorPlainText();
+      const contentHtml = getEditorRichHtml();
+      const imageCount = imageCountFrom(contentHtml);
 
-      if(!className || !title || !content){
-        alert("請至少填寫「班級 / 年級」、「測驗主題」和「測驗內容」。");
+      if(!className || !title || (!content && !imageCount)){
+        alert("請至少填寫「班級 / 年級」、「測驗主題」，並輸入文字或加入圖片。");
         switchTab("template");
         return;
       }
@@ -1854,6 +2184,7 @@
         title: title,
         type: type,
         content: content,
+        contentHtml: contentHtml,
         archived: false,
         archiveId: "",
         archivedAt: "",
@@ -1861,13 +2192,18 @@
       };
 
       const index = state.templates.findIndex(function(t){ return t.id === item.id; });
+      const original = index >= 0 ? state.templates[index] : null;
       if(index >= 0){
         state.templates[index] = Object.assign({}, state.templates[index], item);
       }else{
         state.templates.push(item);
       }
 
-      saveState();
+      if(!saveState()){
+        if(index >= 0) state.templates[index] = original;
+        else state.templates.pop();
+        return;
+      }
       editingTemplateId = "";
       renderAll();
 
@@ -1885,7 +2221,7 @@
       el("tplClass").value = t.className || "";
       el("tplTitle").value = t.title || "";
       el("tplType").value = t.type || "電話口說";
-      el("templateContent").value = t.content || "";
+      setTemplateEditor(t.content || "", t.contentHtml || "");
       renderTemplates();
       updateSummary();
       switchTab("template");
@@ -1909,7 +2245,14 @@
         : "確定刪除這個班級測驗模板嗎？";
       if(!confirm(message)) return;
 
-      state.templates = state.templates.filter(function(t){ return t.id !== templateId; });
+      if(used){
+        // 保留被學生紀錄引用的隱藏模板，避免刪除後圖片題目跟著遺失。
+        const template = getTemplate(templateId);
+        template.archived = true;
+        template.deleted = true;
+      }else{
+        state.templates = state.templates.filter(function(t){ return t.id !== templateId; });
+      }
       if(editingTemplateId === templateId) clearTemplateInputs();
       saveState();
       renderAll();
@@ -2054,22 +2397,83 @@
       syncQuickButtons();
     }
 
+    /* 自動配合預覽框寬高縮放題目文字及照片，完整呈現、不產生捲軸。
+       原本的內容 HTML 與記錄儲存欄位均不變。 */
+    let previewFitRaf = 0;
+    function fitPreviewContents(viewport, content){
+      if(!viewport || !content) return;
+      const style = getComputedStyle(viewport);
+      const availableW = viewport.clientWidth - parseFloat(style.paddingLeft || 0) - parseFloat(style.paddingRight || 0);
+      const availableH = viewport.clientHeight - parseFloat(style.paddingTop || 0) - parseFloat(style.paddingBottom || 0);
+      if(availableW < 80 || availableH < 40) return;
+      content.style.transform = "none";
+      content.style.maxHeight = "none";
+      // 與實際縮放比例匹配寬度，文字可以自然換行，圖片以比例縮小。
+      function test(scale){
+        content.style.width = (availableW / scale).toFixed(2) + "px";
+        content.style.transform = "scale(" + scale.toFixed(4) + ")";
+        const height = Math.max(content.scrollHeight, content.getBoundingClientRect().height / scale);
+        return height * scale <= availableH + 0.5;
+      }
+      let low = 0.05, high = 1, best = 0.05;
+      if(test(1)){best = 1;}
+      else{
+        for(let i=0;i<17;i++){
+          const mid=(low+high)/2;
+          if(test(mid)){best=mid;low=mid;}
+          else high=mid;
+        }
+      }
+      test(best);
+      content.dataset.fitScale = best.toFixed(2);
+    }
+    function fitTestPreview(){
+      fitPreviewContents(el("previewBody"),el("testPreview"));
+      const overlay = el("testPreviewOverlay");
+      if(overlay && !overlay.hidden) fitPreviewContents(el("fullPreviewBody"),el("fullPreviewContent"));
+    }
+    function schedulePreviewFit(){
+      if(previewFitRaf) cancelAnimationFrame(previewFitRaf);
+      previewFitRaf=requestAnimationFrame(function(){
+        previewFitRaf=0;
+        fitTestPreview();
+      });
+    }
+    function openTestPreview(){
+      const overlay = el("testPreviewOverlay");
+      el("fullPreviewContent").innerHTML = el("testPreview").innerHTML;
+      overlay.hidden = false;
+      document.body.classList.add("preview-overlay-open");
+      el("closeTestPreviewBtn").focus();
+      schedulePreviewFit();
+    }
+    function closeTestPreview(){
+      el("testPreviewOverlay").hidden = true;
+      document.body.classList.remove("preview-overlay-open");
+      el("expandTestPreviewBtn").focus();
+      schedulePreviewFit();
+    }
+
     function updateTestPreview(recordForSnapshot){
       const template = selectedRecordTemplate();
-      let content = "";
+      let content = "", contentHtml = "";
       if(template){
         content = template.content || "";
+        contentHtml = template.contentHtml || "";
       }else if(recordForSnapshot){
-        content = recordForSnapshot.contentSnapshot || "";
+        const archivedTemplate = getTemplate(recordForSnapshot.templateId);
+        content = (archivedTemplate && archivedTemplate.content) || recordForSnapshot.contentSnapshot || "";
+        contentHtml = (archivedTemplate && archivedTemplate.contentHtml) || "";
       }
 
-      if(content){
+      if(content || imageCountFrom(contentHtml)){
         el("testPreview").classList.remove("muted");
-        el("testPreview").textContent = content;
+        renderRichContent(el("testPreview"),content,contentHtml,"—");
       }else{
         el("testPreview").classList.add("muted");
         el("testPreview").textContent = "請先選擇或建立班級測驗內容。";
       }
+      schedulePreviewFit();
       updateSummary();
     }
 
@@ -2133,7 +2537,7 @@
 
       if(selectedTemplate && !selectedTemplate.archived){
         el("standaloneTestTitle").textContent = "本次測驗內容｜" + selectedTemplate.className + "｜" + selectedTemplate.title;
-        el("standaloneTestContent").textContent = selectedTemplate.content || "—";
+        renderRichContent(el("standaloneTestContent"),selectedTemplate.content,selectedTemplate.contentHtml,"—");
         return;
       }
 
@@ -2144,7 +2548,7 @@
         const onlyTemplate = getTemplate(templateIds[0]);
         if(onlyTemplate){
           el("standaloneTestTitle").textContent = "本次測驗內容｜" + onlyTemplate.className + "｜" + onlyTemplate.title;
-          el("standaloneTestContent").textContent = onlyTemplate.content || "—";
+          renderRichContent(el("standaloneTestContent"),onlyTemplate.content,onlyTemplate.contentHtml,"—");
           return;
         }
       }
@@ -2166,7 +2570,7 @@
         return [
           '<div class="template-item' + active + '">',
           '<div class="template-name">' + safe(t.className) + '｜' + safe(t.title) + '</div>',
-          '<div class="template-meta">' + safe(t.type) + '｜題目字數：約 ' + String((t.content || "").length) + ' 字</div>',
+          '<div class="template-meta">' + safe(t.type) + '｜題目字數：約 ' + String((t.content || "").length) + ' 字｜圖片 ' + imageCountFrom(t.contentHtml) + ' 張</div>',
           '<div class="item-actions">',
           '<button class="btn small primary use-template-btn" type="button" data-id="' + safe(t.id) + '">選用</button>',
           '<button class="btn small ghost edit-template-btn" type="button" data-id="' + safe(t.id) + '">編輯</button>',
@@ -2525,14 +2929,18 @@
           const data = normalizeState(JSON.parse(e.target.result));
           if(!confirm("匯入後會覆蓋目前全部資料，確定嗎？")) return;
 
+          const previousState=state;
           state = data;
+          if(!saveState()){
+            state=previousState;
+            return;
+          }
           editingTemplateId = "";
           editingRecordId = "";
-          saveState();
           renderAll();
           clearTemplateInputs();
           clearRecordInputs(false);
-          showStatus("匯入完成。若備份檔含歷史檔案，也會一起匯入。");
+          showStatus("匯入完成。備份 JSON 中的圖片、班級測驗與歷史檔案也會一起匯入。");
         }catch(error){
           alert("匯入失敗：JSON 格式不正確。");
         }finally{
@@ -2635,12 +3043,84 @@
 
       el("newTemplateBtn").addEventListener("click", clearTemplateInputs);
       el("goTemplateBtn").addEventListener("click", function(){ switchTab("template"); });
+      el("expandTestPreviewBtn").addEventListener("click",openTestPreview);
+      el("closeTestPreviewBtn").addEventListener("click",closeTestPreview);
+      el("testPreviewOverlay").addEventListener("click",function(event){
+        if(event.target === el("testPreviewOverlay")) closeTestPreview();
+      });
+      document.addEventListener("keydown",function(event){
+        if(event.key === "Escape" && !el("testPreviewOverlay").hidden) closeTestPreview();
+      });
+      window.addEventListener("resize",schedulePreviewFit);
+      el("testPreview").addEventListener("load",schedulePreviewFit,true);
+      el("fullPreviewContent").addEventListener("load",schedulePreviewFit,true);
       el("sideRecordsBtn").addEventListener("click", function(){ switchTab("records"); });
 
       el("printBtn").addEventListener("click", printRecords);
       el("exportCsvBtn").addEventListener("click", exportCSV);
       el("exportJsonBtn").addEventListener("click", exportJSON);
       el("importFile").addEventListener("change", importJSON);
+
+      const richEditor = el("templateContent");
+      el("addTemplateImageBtn").addEventListener("mousedown", rememberEditorCaret);
+      el("addTemplateImageBtn").addEventListener("click",function(){
+        rememberEditorCaret();
+        el("templateImageFile").click();
+      });
+      el("templateImageFile").addEventListener("change",function(e){
+        insertImageFiles(e.target.files);
+        e.target.value="";
+      });
+      el("removeTemplateImageBtn").addEventListener("click",removeSelectedImage);
+      richEditor.addEventListener("keyup",rememberEditorCaret);
+      richEditor.addEventListener("mouseup",rememberEditorCaret);
+      richEditor.addEventListener("focus",rememberEditorCaret);
+      richEditor.addEventListener("input",updateTemplateImageControls);
+      richEditor.addEventListener("click",function(event){
+        richEditor.querySelectorAll("img.selected-image").forEach(function(im){im.classList.remove("selected-image");});
+        selectedTemplateImage=event.target.tagName === "IMG" ? event.target : null;
+        if(selectedTemplateImage) selectedTemplateImage.classList.add("selected-image");
+        updateTemplateImageControls();
+        if(!selectedTemplateImage) rememberEditorCaret();
+      });
+      // 鍵盤 Delete/Backspace 可刪除目前點選的圖片。
+      richEditor.addEventListener("keydown",function(event){
+        if(selectedTemplateImage && (event.key === "Delete" || event.key === "Backspace")){
+          event.preventDefault();removeSelectedImage();
+        }
+      });
+      richEditor.addEventListener("dragover",function(event){
+        if(Array.from(event.dataTransfer.types).includes("Files")){
+          event.preventDefault();richEditor.classList.add("drag-over");
+        }
+      });
+      richEditor.addEventListener("dragleave",function(){richEditor.classList.remove("drag-over");});
+      richEditor.addEventListener("drop",function(event){
+        richEditor.classList.remove("drag-over");
+        if(!event.dataTransfer.files.length) return;
+        event.preventDefault();
+        rememberEditorCaret();
+        insertImageFiles(event.dataTransfer.files);
+      });
+      document.addEventListener("paste",function(event){
+        if(currentTab !== "template") return;
+        const items = Array.from((event.clipboardData && event.clipboardData.items) || []);
+        const images = items.filter(function(item){return item.type.startsWith("image/");}).map(function(item){return item.getAsFile();}).filter(Boolean);
+        if(images.length){
+          event.preventDefault();
+          rememberEditorCaret();
+          insertImageFiles(images);
+          return;
+        }
+        if(event.target === richEditor || richEditor.contains(event.target)){
+          // 貼入純文字；避免 Word/網頁附帶的字型、外部連結或危險標籤。
+          event.preventDefault();
+          const plain = event.clipboardData ? event.clipboardData.getData("text/plain") : "";
+          richEditor.focus();
+          document.execCommand("insertText",false,plain);
+          rememberEditorCaret();
+        }
+      });
 
       el("recordTemplate").addEventListener("change", updateTestPreview);
       el("search").addEventListener("input", renderRecords);
